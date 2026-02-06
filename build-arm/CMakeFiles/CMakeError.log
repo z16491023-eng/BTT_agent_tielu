@@ -1,0 +1,61 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-2s8AYq
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_f5d35/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_f5d35.dir/build.make CMakeFiles/cmTC_f5d35.dir/build
+gmake[1]: 进入目录“/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-2s8AYq”
+Building C object CMakeFiles/cmTC_f5d35.dir/src.c.o
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu11 -o CMakeFiles/cmTC_f5d35.dir/src.c.o -c /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-2s8AYq/src.c
+Linking C executable cmTC_f5d35
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f5d35.dir/link.txt --verbose=1
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc CMakeFiles/cmTC_f5d35.dir/src.c.o -o cmTC_f5d35 
+/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/ld: CMakeFiles/cmTC_f5d35.dir/src.c.o: in function `main':
+src.c:(.text+0x40): undefined reference to `pthread_create'
+/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/ld: src.c:(.text+0x4c): undefined reference to `pthread_detach'
+/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/ld: src.c:(.text+0x58): undefined reference to `pthread_cancel'
+/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/ld: src.c:(.text+0x68): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_f5d35.dir/build.make:99：cmTC_f5d35] 错误 1
+gmake[1]: 离开目录“/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-2s8AYq”
+gmake: *** [Makefile:127：cmTC_f5d35/fast] 错误 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-ULMACU
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c7804/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c7804.dir/build.make CMakeFiles/cmTC_c7804.dir/build
+gmake[1]: 进入目录“/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-ULMACU”
+Building C object CMakeFiles/cmTC_c7804.dir/CheckFunctionExists.c.o
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc   -DCHECK_FUNCTION_EXISTS=pthread_create -std=gnu11 -o CMakeFiles/cmTC_c7804.dir/CheckFunctionExists.c.o -c /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-ULMACU/CheckFunctionExists.c
+Linking C executable cmTC_c7804
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c7804.dir/link.txt --verbose=1
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_c7804.dir/CheckFunctionExists.c.o -o cmTC_c7804  -lpthreads 
+/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_c7804.dir/build.make:99：cmTC_c7804] 错误 1
+gmake[1]: 离开目录“/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-ULMACU”
+gmake: *** [Makefile:127：cmTC_c7804/fast] 错误 2
+
+
+

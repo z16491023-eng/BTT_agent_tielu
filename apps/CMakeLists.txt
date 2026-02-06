@@ -1,0 +1,31 @@
+
+add_executable(btt_core
+  btt-core/main.cpp
+)
+
+# 关键：让 #include "libs/xxx/yyy.hpp" 能找到
+target_include_directories(btt_core PRIVATE
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/external/include
+  ${CMAKE_SOURCE_DIR}/include
+)
+
+find_package(Threads REQUIRED)
+
+# 1) 外部静态库列表
+set(EXT_MEDIA_LIBS
+  ${EXT_LIB_DIR}/libhsdk_media_3520.a
+  ${EXT_LIB_DIR}/libss_mpi.a
+  ${EXT_LIB_DIR}/libss_voice_engine.a
+  ${EXT_LIB_DIR}/libsecurec.a
+  ${EXT_LIB_DIR}/libss_upvqe.a
+  ${EXT_LIB_DIR}/libss_dnvqe.a
+  ${EXT_LIB_DIR}/libss_nnie.a
+  ${EXT_LIB_DIR}/libss_ive.a
+  ${EXT_LIB_DIR}/libss_hdmi.a
+  ${EXT_LIB_DIR}/libhgs_misc.a
+)
+target_link_libraries(btt_core PRIVATE Threads::Threads atomic
+  ${EXT_MEDIA_LIBS}
+   dl 
+)

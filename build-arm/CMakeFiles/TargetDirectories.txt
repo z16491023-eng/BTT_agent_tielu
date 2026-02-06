@@ -1,0 +1,5 @@
+/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/edit_cache.dir
+/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/rebuild_cache.dir
+/home/li/hi_project/Btt-agent/build-arm/apps/CMakeFiles/btt_core.dir
+/home/li/hi_project/Btt-agent/build-arm/apps/CMakeFiles/edit_cache.dir
+/home/li/hi_project/Btt-agent/build-arm/apps/CMakeFiles/rebuild_cache.dir

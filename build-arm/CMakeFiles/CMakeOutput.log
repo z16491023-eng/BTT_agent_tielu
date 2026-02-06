@@ -1,0 +1,430 @@
+The target system is: Linux -  - arm
+The host system is: Linux - 6.1.0-41-amd64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/3.25.1/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/3.25.1/CompilerIdCXX/a.out"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-XIrfMP
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_cf5d9/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cf5d9.dir/build.make CMakeFiles/cmTC_cf5d9.dir/build
+gmake[1]: Entering directory '/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-XIrfMP'
+Building C object CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc   -v -o CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.25/Modules/CMakeCCompilerABI.c
+Using built-in specs.
+COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc
+Target: arm-linux-gnueabi
+Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib
+Thread model: posix
+gcc version 7.3.0 (20230109) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o' '-c' '-mtls-dialect=gnu'
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/cc1 -quiet -v -iprefix /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/ -isysroot /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target /usr/share/cmake-3.25/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtls-dialect=gnu -auxbase-strip CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -version -o /tmp/cc4n8DCd.s
+GNU C11 (20230109) version 7.3.0 (arm-linux-gnueabi)
+	compiled by GNU C version 7.5.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.25-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include"
+ignoring nonexistent directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/local/include"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include
+End of search list.
+GNU C11 (20230109) version 7.3.0 (arm-linux-gnueabi)
+	compiled by GNU C version 7.5.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.25-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: b8f82b60d1b26664d5b7f2784e223486
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o' '-c' '-mtls-dialect=gnu'
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/as -v -meabi=5 -o CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o /tmp/cc4n8DCd.s
+GNU assembler version 2.34 (arm-linux-gnueabi) using BFD version (GNU Binutils) 2.34
+COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/
+LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o' '-c' '-mtls-dialect=gnu'
+Linking C executable cmTC_cf5d9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cf5d9.dir/link.txt --verbose=1
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc  -v CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -o cmTC_cf5d9 
+Using built-in specs.
+COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc
+COLLECT_LTO_WRAPPER=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper
+Target: arm-linux-gnueabi
+Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib
+Thread model: posix
+gcc version 7.3.0 (20230109) 
+COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/
+LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cf5d9' '-mtls-dialect=gnu'
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/collect2 -plugin /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/liblto_plugin.so -plugin-opt=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cckMuNVO.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target --eh-frame-hdr -dynamic-linker /lib/ld-linux.so.3 -X -m armelf_linux_eabi -o cmTC_cf5d9 /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0 -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cf5d9' '-mtls-dialect=gnu'
+gmake[1]: Leaving directory '/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-XIrfMP'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include]
+  end of search list found
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/include]
+  implicit include dirs: [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed;/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include;/opt/linux/x86-arm/arm-mix410-linux/target/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(arm-mix410-linux-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-XIrfMP]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_cf5d9/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cf5d9.dir/build.make CMakeFiles/cmTC_cf5d9.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-XIrfMP']
+  ignore line: [Building C object CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc   -v -o CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.25/Modules/CMakeCCompilerABI.c]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc]
+  ignore line: [Target: arm-linux-gnueabi]
+  ignore line: [Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.3.0 (20230109) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o' '-c' '-mtls-dialect=gnu']
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/cc1 -quiet -v -iprefix /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/ -isysroot /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target /usr/share/cmake-3.25/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtls-dialect=gnu -auxbase-strip CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -version -o /tmp/cc4n8DCd.s]
+  ignore line: [GNU C11 (20230109) version 7.3.0 (arm-linux-gnueabi)]
+  ignore line: [	compiled by GNU C version 7.5.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.25-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include"]
+  ignore line: [ignoring nonexistent directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/local/include"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (20230109) version 7.3.0 (arm-linux-gnueabi)]
+  ignore line: [	compiled by GNU C version 7.5.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.25-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: b8f82b60d1b26664d5b7f2784e223486]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o' '-c' '-mtls-dialect=gnu']
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/as -v -meabi=5 -o CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o /tmp/cc4n8DCd.s]
+  ignore line: [GNU assembler version 2.34 (arm-linux-gnueabi) using BFD version (GNU Binutils) 2.34]
+  ignore line: [COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/]
+  ignore line: [LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o' '-c' '-mtls-dialect=gnu']
+  ignore line: [Linking C executable cmTC_cf5d9]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cf5d9.dir/link.txt --verbose=1]
+  ignore line: [/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc  -v CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -o cmTC_cf5d9 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper]
+  ignore line: [Target: arm-linux-gnueabi]
+  ignore line: [Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.3.0 (20230109) ]
+  ignore line: [COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/]
+  ignore line: [LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cf5d9' '-mtls-dialect=gnu']
+  link line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/collect2 -plugin /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/liblto_plugin.so -plugin-opt=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cckMuNVO.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target --eh-frame-hdr -dynamic-linker /lib/ld-linux.so.3 -X -m armelf_linux_eabi -o cmTC_cf5d9 /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0 -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cckMuNVO.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--sysroot=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-linux.so.3] ==> ignore
+    arg [-X] ==> ignore
+    arg [-m] ==> ignore
+    arg [armelf_linux_eabi] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_cf5d9] ==> ignore
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib]
+    arg [CMakeFiles/cmTC_cf5d9.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crt1.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crti.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crtn.o]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/lib]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/lib]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit objs: [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crt1.o;/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crti.o;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o;/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crtn.o]
+  implicit dirs: [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc;/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/lib;/opt/linux/x86-arm/arm-mix410-linux/target/lib;/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib]
+  implicit fwks: []
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-WNzxac
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0c463/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0c463.dir/build.make CMakeFiles/cmTC_0c463.dir/build
+gmake[1]: Entering directory '/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-WNzxac'
+Building CXX object CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++   -v -o CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp
+Using built-in specs.
+COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++
+Target: arm-linux-gnueabi
+Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib
+Thread model: posix
+gcc version 7.3.0 (20230109) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtls-dialect=gnu'
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/cc1plus -quiet -v -iprefix /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/ -isysroot /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target -D_GNU_SOURCE /usr/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtls-dialect=gnu -auxbase-strip CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccb6JnV3.s
+GNU C++14 (20230109) version 7.3.0 (arm-linux-gnueabi)
+	compiled by GNU C version 7.5.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.25-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/backward"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include"
+ignoring nonexistent directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/local/include"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed"
+ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/backward
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include
+End of search list.
+GNU C++14 (20230109) version 7.3.0 (arm-linux-gnueabi)
+	compiled by GNU C version 7.5.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.25-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 3e920a3cf00098bf7ad754099ea34bf5
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtls-dialect=gnu'
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/as -v -meabi=5 -o CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccb6JnV3.s
+GNU assembler version 2.34 (arm-linux-gnueabi) using BFD version (GNU Binutils) 2.34
+COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/
+LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtls-dialect=gnu'
+Linking CXX executable cmTC_0c463
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0c463.dir/link.txt --verbose=1
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++  -v CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_0c463 
+Using built-in specs.
+COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++
+COLLECT_LTO_WRAPPER=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper
+Target: arm-linux-gnueabi
+Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib
+Thread model: posix
+gcc version 7.3.0 (20230109) 
+COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/
+LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_0c463' '-shared-libgcc' '-mtls-dialect=gnu'
+ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/collect2 -plugin /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/liblto_plugin.so -plugin-opt=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc1n9uj4.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target --eh-frame-hdr -dynamic-linker /lib/ld-linux.so.3 -X -m armelf_linux_eabi -o cmTC_0c463 /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0 -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_0c463' '-shared-libgcc' '-mtls-dialect=gnu'
+gmake[1]: Leaving directory '/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-WNzxac'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/backward]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include]
+    add: [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include]
+  end of search list found
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/backward] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include]
+  collapse include dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/include]
+  implicit include dirs: [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0;/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi;/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed;/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include;/opt/linux/x86-arm/arm-mix410-linux/target/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(arm-mix410-linux-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-WNzxac]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0c463/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0c463.dir/build.make CMakeFiles/cmTC_0c463.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-WNzxac']
+  ignore line: [Building CXX object CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++   -v -o CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++]
+  ignore line: [Target: arm-linux-gnueabi]
+  ignore line: [Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.3.0 (20230109) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtls-dialect=gnu']
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/cc1plus -quiet -v -iprefix /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/ -isysroot /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target -D_GNU_SOURCE /usr/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtls-dialect=gnu -auxbase-strip CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -version -o /tmp/ccb6JnV3.s]
+  ignore line: [GNU C++14 (20230109) version 7.3.0 (arm-linux-gnueabi)]
+  ignore line: [	compiled by GNU C version 7.5.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.25-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/backward"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include"]
+  ignore line: [ignoring nonexistent directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/local/include"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed"]
+  ignore line: [ignoring duplicate directory "/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/../../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include/c++/7.3.0/backward]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/include-fixed]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/include]
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C++14 (20230109) version 7.3.0 (arm-linux-gnueabi)]
+  ignore line: [	compiled by GNU C version 7.5.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.25-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 3e920a3cf00098bf7ad754099ea34bf5]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtls-dialect=gnu']
+  ignore line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/as -v -meabi=5 -o CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccb6JnV3.s]
+  ignore line: [GNU assembler version 2.34 (arm-linux-gnueabi) using BFD version (GNU Binutils) 2.34]
+  ignore line: [COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/]
+  ignore line: [LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtls-dialect=gnu']
+  ignore line: [Linking CXX executable cmTC_0c463]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0c463.dir/link.txt --verbose=1]
+  ignore line: [/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++  -v CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_0c463 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++]
+  ignore line: [COLLECT_LTO_WRAPPER=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper]
+  ignore line: [Target: arm-linux-gnueabi]
+  ignore line: [Configured with: /home/pub/workspace/toolchaines/build/arm-mix410-linux/../../open_source/arm_mix410_build_src/gcc-7.3.0/configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu --target=arm-linux-gnueabi --prefix=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410 --enable-threads --disable-libmudflap --enable-libssp --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --enable-shared --enable-lto --enable-symvers=gnu --enable-__cxa_atexit --disable-nls --enable-clocale=gnu --enable-multilib --with-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-build-sysroot=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/arm_mix410/target --with-gmp=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpfr=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --with-mpc=/home/pub/workspace/toolchaines/build/arm-mix410-linux/arm_mix410_build_dir/obj/host-libs/usr --enable-libgomp --disable-libitm --enable-poison-system-directories --with-pkgversion=20230109 --disable-bootstrap --with-system-zlib]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.3.0 (20230109) ]
+  ignore line: [COMPILER_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/bin/]
+  ignore line: [LIBRARY_PATH=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib/:/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_0c463' '-shared-libgcc' '-mtls-dialect=gnu']
+  link line: [ /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/collect2 -plugin /opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/liblto_plugin.so -plugin-opt=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cc1n9uj4.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target --eh-frame-hdr -dynamic-linker /lib/ld-linux.so.3 -X -m armelf_linux_eabi -o cmTC_0c463 /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0 -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib -L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o /opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../libexec/gcc/arm-linux-gnueabi/7.3.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cc1n9uj4.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [--sysroot=/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-linux.so.3] ==> ignore
+    arg [-X] ==> ignore
+    arg [-m] ==> ignore
+    arg [armelf_linux_eabi] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_0c463] ==> ignore
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib]
+    arg [-L/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib] ==> dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib]
+    arg [CMakeFiles/cmTC_0c463.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o]
+    arg [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o] ==> obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crt1.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crt1.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crti.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crti.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o]
+  collapse obj [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib/crtn.o] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crtn.o]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc] ==> [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../lib/gcc/arm-linux-gnueabi/7.3.0/../../../../arm-linux-gnueabi/lib] ==> [/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/lib]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/lib] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/lib]
+  collapse library dir [/opt/linux/x86-arm/arm-mix410-linux/host_bin/../target/usr/lib] ==> [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib]
+  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+  implicit objs: [/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crt1.o;/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crti.o;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtbegin.o;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/crtend.o;/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib/crtn.o]
+  implicit dirs: [/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0;/opt/linux/x86-arm/arm-mix410-linux/lib/gcc;/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/lib;/opt/linux/x86-arm/arm-mix410-linux/target/lib;/opt/linux/x86-arm/arm-mix410-linux/target/usr/lib]
+  implicit fwks: []
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-MmPc8o
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_9cca5/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_9cca5.dir/build.make CMakeFiles/cmTC_9cca5.dir/build
+gmake[1]: 进入目录“/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-MmPc8o”
+Building C object CMakeFiles/cmTC_9cca5.dir/CheckFunctionExists.c.o
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc   -DCHECK_FUNCTION_EXISTS=pthread_create -std=gnu11 -o CMakeFiles/cmTC_9cca5.dir/CheckFunctionExists.c.o -c /home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-MmPc8o/CheckFunctionExists.c
+Linking C executable cmTC_9cca5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9cca5.dir/link.txt --verbose=1
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-gcc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_9cca5.dir/CheckFunctionExists.c.o -o cmTC_9cca5  -lpthread 
+gmake[1]: 离开目录“/home/li/hi_project/Btt-agent/build-arm/CMakeFiles/CMakeScratch/TryCompile-MmPc8o”
+
+
+
