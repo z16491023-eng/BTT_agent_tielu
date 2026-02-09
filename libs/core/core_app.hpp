@@ -39,7 +39,7 @@
 
 
 
-// 多媒体库（参考 agent.c / HiF_media_ss522.h）
+
 extern "C" {
 #include "HiF_media_ss522.h"
 #include "hgs_misc.h"
@@ -706,6 +706,31 @@ inline void m5_load_into_runtime(const DefaultConfig& def, RuntimeConfig& rt) {
   // periodic 默认关闭
   rt.m5_measure_periodic.store(false);
   if (rt.m5_measure_interval_min.load() == 0) rt.m5_measure_interval_min.store(30);
+}
+
+inline bool m5_apply_persisted_eth0_if_ready(const RuntimeConfig& rt) {
+  const uint32_t dev_ip = rt.m5_dev_ip_be.load();
+  const uint32_t gw = rt.m5_gateway_be.load();
+  const uint32_t mask = rt.m5_netmask_be.load();
+  if (dev_ip == 0 || gw == 0 || mask == 0) {
+    LOGI("M5 BOOT NET skip: persisted eth0 config incomplete dev=%s gw=%s mask=%s",
+         ip_be_to_string(dev_ip).c_str(),
+         ip_be_to_string(gw).c_str(),
+         ip_be_to_string(mask).c_str());
+    return false;
+  }
+
+  std::string err;
+  if (!apply_net_config_ioctl("eth0", dev_ip, mask, gw, err)) {
+    LOGW("M5 BOOT NET apply failed: %s", err.c_str());
+    return false;
+  }
+
+  LOGI("M5 BOOT NET applied: dev=%s gw=%s mask=%s",
+       ip_be_to_string(dev_ip).c_str(),
+       ip_be_to_string(gw).c_str(),
+       ip_be_to_string(mask).c_str());
+  return true;
 }
 
 inline void m5_snapshot_runtime_to_persist(const RuntimeConfig& rt, M5PersistV1& out) {
@@ -2540,7 +2565,7 @@ static uint8_t hif_pic_to_code(int hif_pic)
   }
 }
 
-static int     code_to_hif_pic(uint8_t code);  // 可选：如果你也需要 0x1A 用
+static int     code_to_hif_pic(uint8_t code);  // 也需要 0x1A 用
 
 void handle_get_media_1B_req(const btt::proto::Frame& fr,
                             btt::core::RuntimeConfig& rt,
@@ -2556,11 +2581,11 @@ void handle_get_media_1B_req(const btt::proto::Frame& fr,
   uint8_t reason = 0x00;
 
   // 默认回退值（防止读取失败时全 0）
-  uint8_t pic_res_code = 3;   // 你可固定默认
+  uint8_t pic_res_code = 3;   // 固定默认
   uint8_t pic_quality  = 75;  // 默认 75
   uint8_t vid_res_code = 3;   // 默认 720P
   uint8_t vid_fps      = 25;  // 默认 25
-  uint8_t vid_br_unit  = 0xFF;// 默认未知/不支持时 FF，或按你定义
+  uint8_t vid_br_unit  = 0xFF;// 默认未知/不支持时 FF，
 
   // 1) 从 HiF 读取参数
   hif_media_param_t mp;  
@@ -2569,13 +2594,13 @@ void handle_get_media_1B_req(const btt::proto::Frame& fr,
   int rc = HiF_media_get_param(0,&mp);  
   if (rc != 0) {
     result = 0x01;
-    reason = 0x01;  // 读取失败原因码你自定义
+    reason = 0x01;  // 读取失败原因码自定义
   } else {
     // 2) 从 mp 映射到协议字段
-    // --- 图片分辨率：如果你按前面要求“无效化图片分辨率”，这里可以固定返回默认
+    // --- 图片分辨率：无效化图片分辨率
     // pic_res_code = 3;
 
-    // 如果你仍想反映真实值（即使 0x1A 忽略，也能用于观察当前底层状态）
+  
     pic_res_code = hif_pic_to_code(mp.pic_size);      // 
     vid_res_code = hif_pic_to_code(mp.pic_size);    // 
 
@@ -2584,8 +2609,7 @@ void handle_get_media_1B_req(const btt::proto::Frame& fr,
 
     vid_fps      = static_cast<uint8_t>(mp.frame_rate);     
     // 协议里 vid_br_unit 是 32K 的倍数单位：bitrateUnit(1B)
-    // 如果 mp.bitrate 是 bps 或 kbps，需要换算：
-    // 假设 mp.bitrate_kbps：单位 kbps
+    // mp.bitrate_kbps：单位 kbps
     // bitrateUnit = (mp.bitrate_kbps * 1024) / (32*1024) = mp.bitrate_kbps / 32
     if (mp.bit_rate > 0) {                      
       vid_br_unit = static_cast<uint8_t>(mp.bit_rate / 32);
@@ -4277,6 +4301,7 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   // M5：加载持久化配置 + misc 初始化
   hgs_misc_init();
   m5_load_into_runtime(def, rt);
+  (void)m5_apply_persisted_eth0_if_ready(rt);
 
   // M7：绑定实时流到媒体回调与控制通道
   streamer.attach(rt, outbound);

@@ -40,7 +40,7 @@ struct Frame {
   uint16_t seq   = 1;
   std::vector<uint8_t> payload;
 
-  // 仅用于开发阶段定位协议对齐（可保留；后期可删）
+  // 仅用于开发阶段定位协议对齐
   std::vector<uint8_t> raw; // RX 时填充整帧原始字节
 };
 

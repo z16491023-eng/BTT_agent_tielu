@@ -218,6 +218,15 @@ CMAKE_TOOLCHAIN_FILE:FILEPATH=/home/li/hi_project/Btt-agent/cmake/toolchains/arm
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Value Computed by CMake
+Project_BINARY_DIR:STATIC=/home/li/hi_project/Btt-agent/build-arm
+
+//Value Computed by CMake
+Project_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Project_SOURCE_DIR:STATIC=/home/li/hi_project/Btt-agent
+
 
 ########################
 # INTERNAL cache entries
