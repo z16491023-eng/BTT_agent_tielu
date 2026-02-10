@@ -28,14 +28,51 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/move.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/concept_check.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/type_traits \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/arpa/inet.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/in.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/socket.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_iovec.h \
+  /opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stddef.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/types.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/clock_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/clockid_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/time_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/timer_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/endian.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/endian.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/byteswap.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/uintn-identity.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/select.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/select.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigset_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigset_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timeval.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timespec.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/thread-shared-types.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes-arch.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket_type.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sockaddr.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/socket.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/socket.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/sockios.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/sockios.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_osockaddr.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/in.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cerrno \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/errno.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/errno.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/errno.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/errno.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno-base.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/error_t.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/csignal \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/signal.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/signum.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/signum-generic.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sig_atomic_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigset_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigset_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timespec.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/siginfo_t.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigval_t.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-arch.h \
@@ -47,41 +84,44 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigaction.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigcontext.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/sigcontext.h \
-  /opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stddef.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/stack_t.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ucontext.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigstack.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ss_flags.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_sigstack.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/thread-shared-types.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes-arch.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/endian.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/endian.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/byteswap.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/uintn-identity.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigthread.h \
-  /home/li/hi_project/Btt-agent/libs/core/core_app.hpp \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/thread \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/chrono \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ratio \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdint \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/limits \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ctime \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/time.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/time.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/timex.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timeval.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/clock_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/time_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_tm.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/clockid_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/timer_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_itimerspec.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdio \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdio.h \
+  /opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stdarg.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__mbstate_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos64_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__FILE.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/FILE.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_FILE.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/cookie_io_functions_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio_lim.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sys_errlist.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdlib \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdlib.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitflags.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitstatus.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn-common.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/locale_t.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__locale_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/parse_numbers.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/memory \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/alloca.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdlib-bsearch.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdlib-float.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/std_abs.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstring \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/string.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/strings.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stringfwd.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/memoryfwd.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/char_traits.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_algobase.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/functexcept.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception_defines.h \
@@ -96,6 +136,12 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ptr_traits.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/debug/debug.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/predefined_ops.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/postypes.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cwchar \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/wchar.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/wint_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/mbstate_t.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdint \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/allocator.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++allocator.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/new_allocator.h \
@@ -107,29 +153,21 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/typeinfo \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/hash_bytes.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/nested_exception.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/memoryfwd.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_construct.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/alloc_traits.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/alloc_traits.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_uninitialized.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/utility \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_relops.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/initializer_list \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_tempbuf.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_raw_storage_iter.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/localefwd.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++locale.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/clocale \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/locale.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/locale.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/iosfwd \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stringfwd.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/postypes.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cwchar \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/wchar.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn-common.h \
-  /opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stdarg.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/wint_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/mbstate_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__mbstate_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__FILE.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/FILE.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cctype \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/ctype.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ostream_insert.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cxxabi_forced.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_function.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/binders.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/range_access.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/initializer_list \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/atomicity.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr-default.h \
@@ -138,62 +176,40 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sched.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_sched_param.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/cpu-set.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/time.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/time.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/timex.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_tm.h \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_itimerspec.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/setjmp.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/atomic_word.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/alloc_traits.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/alloc_traits.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string_view \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/limits \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/functional_hash.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/string_view.tcc \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/string_conversions.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.tcc \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/utility \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_relops.h \
+  /home/li/hi_project/Btt-agent/libs/core/core_app.hpp \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/thread \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/chrono \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ratio \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ctime \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/parse_numbers.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/memory \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_construct.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_uninitialized.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_tempbuf.h \
+  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_raw_storage_iter.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/concurrence.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_function.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/binders.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/uses_allocator.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/unique_ptr.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/tuple \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/array \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/stdexcept \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/char_traits.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/localefwd.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++locale.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/clocale \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/locale.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/locale.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cctype \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/ctype.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ostream_insert.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cxxabi_forced.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/range_access.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string_view \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/functional_hash.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/string_view.tcc \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/string_conversions.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdlib \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdlib.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitflags.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitstatus.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/types.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/select.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/select.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/alloca.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdlib-bsearch.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdlib-float.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/std_abs.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdio \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdio.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos64_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_FILE.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/cookie_io_functions_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio_lim.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sys_errlist.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cerrno \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/errno.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/errno.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/errno.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/errno.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno-base.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/error_t.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.tcc \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/invoke.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/shared_ptr.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/shared_ptr_base.h \
@@ -202,9 +218,6 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/aligned_buffer.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/shared_ptr_atomic.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/auto_ptr.h \
-  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstring \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/string.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/strings.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/vector \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_vector.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_bvector.h \
@@ -223,7 +236,6 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/fcntl.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/fcntl.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/fcntl-linux.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_iovec.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/falloc.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stat.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/stat.h \
@@ -244,18 +256,6 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_deque.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/deque.tcc \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstddef \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/arpa/inet.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/in.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/socket.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket_type.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sockaddr.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/socket.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/socket.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/sockios.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/sockios.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_osockaddr.h \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/in.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ioctl.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/ioctls.h \
@@ -411,117 +411,151 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/ioctls.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/wchar.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/postypes.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_raw_storage_iter.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_sched_param.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/initializer_list:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/alloc_traits.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/thread:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_construct.h:
-
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/memoryfwd.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdarg:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ostream_insert.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/fstream:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/time64.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/ctype_inline.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/cpu-set.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdlib.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/new:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sys_errlist.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/predefined_ops.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/parse_numbers.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/debug/assertions.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__locale_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_pair.h:
+/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stdint.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/cookie_io_functions_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_iterator.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-arch.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigaction.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos64_t.h:
 
-/home/li/hi_project/Btt-agent/libs/net/tcp_client.hpp:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/ctype.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/errno.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/auto_ptr.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/sockios.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdio:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/clockid_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/functexcept.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/in.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_tm.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdio.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timeval.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_sigstack.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/csignal:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ss_flags.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++allocator.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ucontext.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/siginfo_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigstack.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ptr_traits.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/fstream.tcc:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/timex.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cctype:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_algobase.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigcontext.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigaction.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ptr_traits.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_iterator.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/string_view.tcc:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn-common.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/algorithmfwd.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigevent-consts.h:
 
-/home/li/hi_project/Btt-agent/libs/core/core_app.hpp:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigval_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/functexcept.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-consts-arch.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-arch.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-consts.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/endian.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/signum.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/deque.tcc:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/ctype_base.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/errno.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/error_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/locale_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/endian.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/errno.h:
+
+/home/li/hi_project/Btt-agent/libs/net/tcp_client.hpp:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/errno.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/memory:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/numeric_traits.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/sockios.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/in.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__mbstate_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/os_defines.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/locale_classes.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/wordsize.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/type_traits:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ttydefaults.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/chrono:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/range_access.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdlib-bsearch.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_tempbuf.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ttydefaults.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ctime:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/chrono:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cpp_type_traits.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdlib:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/cdefs.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/unique_ptr.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/new_allocator.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/allocated_ptr.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitflags.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/vector.tcc:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/aligned_buffer.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/wchar.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/byteswap.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/thread-shared-types.h:
 
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/tcp.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_osockaddr.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/move.h:
+
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception_defines.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/locale_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigcontext.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/error_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cctype:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++io.h:
 
@@ -531,57 +565,39 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/fcntl-linux.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/exception:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/std_abs.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/error_constants.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/libc-header-start.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sockaddr.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/clockid_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/deque.tcc:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cxxabi_init_exception.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/string_conversions.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/atomic_base.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/in.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdint-intn.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdint-uintn.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/time.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/atomic:
-
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/mbstate_t.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/confname.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/csignal:
+/home/li/hi_project/Btt-agent/external/include/hgs_misc.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_sigstack.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/floatn-common.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception_ptr.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/locale_classes.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.tcc:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/wordsize.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_vector.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/wctype-wchar.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_uninitialized.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/iosfwd:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/typesizes.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_relops.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/socket.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/debug/debug.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_algo.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-consts-arch.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/hash_bytes.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr-default.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/gnu/stubs-soft.h:
 
@@ -597,58 +613,6 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/gnu/stubs.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/ctype_base.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/errno.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/signum.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/posix_types.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/atomic_lockfree_defines.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/strings.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/stack_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++config.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_heap.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__mbstate_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/os_defines.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stdint.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sys_errlist.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/posix1_lim.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/limits:
-
-/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stdarg.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/unistd.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/timer_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/typeinfo:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/utility:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigstack.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/concept_check.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/nested_exception.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/siginfo-consts.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdint:
-
-/home/li/hi_project/Btt-agent/apps/btt-core/main.cpp:
-
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ostream.tcc:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sig_atomic_t.h:
@@ -657,103 +621,101 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/uses_allocator.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cwchar:
-
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_deque.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cwchar:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/mutex:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/sigcontext.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdarg:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/allocator.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/fstream:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/istream.tcc:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/time64.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_iterator_base_funcs.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/utility:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigthread.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/typeinfo:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++locale.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdint:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timespec.h:
+/home/li/hi_project/Btt-agent/apps/btt-core/main.cpp:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigset_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio_lim.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/dirent.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception_ptr.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++config.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_heap.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/posix1_lim.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.tcc:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/socket.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_vector.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_algobase.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/stdexcept:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/siginfo_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++allocator.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ucontext.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/time.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigval_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/long-double.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/alloc_traits.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigval_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/system_error:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes-arch.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/types.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitflags.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigevent-consts.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/new_allocator.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/uniform_int_dist.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/cdefs.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/locale.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/numeric_traits.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/memory:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/getopt_posix.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/char_traits.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ss_flags.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/time_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stat.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/time_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/wint_t.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timeval.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/FILE.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/arpa/inet.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/atomicity.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/atomic_word.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/clocale:
+/home/li/hi_project/Btt-agent/external/include/hgs_type.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr-default.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/errno.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/typesizes.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/condition_variable:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_uninitialized.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/posix_types.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/socket.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/stack_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/atomic_lockfree_defines.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/strings.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/debug/debug.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/lib/gcc/arm-linux-gnueabi/7.3.0/include/stdarg.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/timer_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/unistd.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_algo.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes-arch.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/atomic_base.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstring:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/select.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/select.h:
 
@@ -763,45 +725,91 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/getopt_core.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sched.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitstatus.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket_type.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/alloca.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/std_mutex.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cerrno:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/setjmp.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/features.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/invoke.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdint.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/concurrence.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigset_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_function.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_timespec.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/binders.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/string.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/unique_ptr.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/pthreadtypes.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdlib:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sockaddr.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/allocated_ptr.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/exception:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/vector.tcc:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/error_constants.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/tuple:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/stdexcept:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string_view:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigset_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/array:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/dirent.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/endian.h:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__locale_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_pair.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_iterator_base_types.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/istream.tcc:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_iterator_base_funcs.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/sigcontext.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/allocator.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sigthread.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/c++locale.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/debug/assertions.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/predefined_ops.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/parse_numbers.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/postypes.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/wchar.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/FILE.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/wint_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/limits:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/new:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/cpu-set.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cxxabi_init_exception.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/string_conversions.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/hash_bytes.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/concept_check.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/nested_exception.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/pthread.h:
 
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_iterator_base_types.h:
+
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/localefwd.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/clocale:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/atomicity.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/cpu_defines.h:
 
@@ -809,75 +817,89 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/locale.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/ctype.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__fpos64_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/auto_ptr.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/ostream_insert.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/libc-header-start.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/std_abs.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/wchar.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/aligned_buffer.h:
-
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cxxabi_forced.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_function.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/backward/binders.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/initializer_list:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.h:
 
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/sched.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_sched_param.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_raw_storage_iter.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/__sigval_t.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/time.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/atomic:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/time.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_tm.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/std_mutex.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket_type.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/setjmp.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/alloc_traits.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/thread:
+
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/functional_hash.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/ctype_inline.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/string_view.tcc:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdlib.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/features.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/alloca.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdint.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cerrno:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigset_t.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/waitstatus.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/system_error:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/types.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdio:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/stdio.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio_lim.h:
-
-/home/li/hi_project/Btt-agent/external/include/hgs_misc.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio.h:
-
-/home/li/hi_project/Btt-agent/external/include/hgs_type.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/errno.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/condition_variable:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/endian.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/errno.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ratio:
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno-base.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/sigevent_t.h:
 
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno-base.h:
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ratio:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/locale.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/uniform_int_dist.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/wctype-wchar.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/iosfwd:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_relops.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/algorithmfwd.h:
+
+/home/li/hi_project/Btt-agent/libs/core/core_app.hpp:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/char_traits.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/getopt_posix.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/cpp_type_traits.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ctime:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_construct.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_tempbuf.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/invoke.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/concurrence.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/tuple:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/string_view:
+
+/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/array:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/shared_ptr.h:
 
@@ -892,12 +914,6 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/linux/if.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/shared_ptr_atomic.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/select.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstring:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/string.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/vector:
 
@@ -950,21 +966,5 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/deque:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstddef:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/atomic_word.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/arpa/inet.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/in.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/socket.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/socket.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/tcp.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/move.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/types/struct_osockaddr.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ioctl.h:
