@@ -130,6 +130,20 @@ btt_core/fast:
 	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/build
 .PHONY : btt_core/fast
 
+# Convenience name for target.
+apps/CMakeFiles/upgraded.dir/rule:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 apps/CMakeFiles/upgraded.dir/rule
+.PHONY : apps/CMakeFiles/upgraded.dir/rule
+
+# Convenience name for target.
+upgraded: apps/CMakeFiles/upgraded.dir/rule
+.PHONY : upgraded
+
+# fast build rule for target.
+upgraded/fast:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/build
+.PHONY : upgraded/fast
+
 btt-core/main.o: btt-core/main.cpp.o
 .PHONY : btt-core/main.o
 
@@ -154,6 +168,30 @@ btt-core/main.cpp.s:
 	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.s
 .PHONY : btt-core/main.cpp.s
 
+upgraded/main.o: upgraded/main.cpp.o
+.PHONY : upgraded/main.o
+
+# target to build an object file
+upgraded/main.cpp.o:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/main.cpp.o
+.PHONY : upgraded/main.cpp.o
+
+upgraded/main.i: upgraded/main.cpp.i
+.PHONY : upgraded/main.i
+
+# target to preprocess a source file
+upgraded/main.cpp.i:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/main.cpp.i
+.PHONY : upgraded/main.cpp.i
+
+upgraded/main.s: upgraded/main.cpp.s
+.PHONY : upgraded/main.s
+
+# target to generate assembly for a file
+upgraded/main.cpp.s:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/main.cpp.s
+.PHONY : upgraded/main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -163,9 +201,13 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... btt_core"
+	@echo "... upgraded"
 	@echo "... btt-core/main.o"
 	@echo "... btt-core/main.i"
 	@echo "... btt-core/main.s"
+	@echo "... upgraded/main.o"
+	@echo "... upgraded/main.i"
+	@echo "... upgraded/main.s"
 .PHONY : help
 
 

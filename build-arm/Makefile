@@ -129,6 +129,19 @@ btt_core/fast:
 	$(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/build
 .PHONY : btt_core/fast
 
+#=============================================================================
+# Target rules for targets named upgraded
+
+# Build rule for target.
+upgraded: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 upgraded
+.PHONY : upgraded
+
+# fast build rule for target.
+upgraded/fast:
+	$(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/build
+.PHONY : upgraded/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -138,6 +151,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... btt_core"
+	@echo "... upgraded"
 .PHONY : help
 
 

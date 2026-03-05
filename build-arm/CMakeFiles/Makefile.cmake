@@ -54,4 +54,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "apps/CMakeFiles/btt_core.dir/DependInfo.cmake"
+  "apps/CMakeFiles/upgraded.dir/DependInfo.cmake"
   )

@@ -3,6 +3,10 @@ add_executable(btt_core
   btt-core/main.cpp
 )
 
+add_executable(upgraded
+  upgraded/main.cpp
+)
+
 # 关键：让 #include "libs/xxx/yyy.hpp" 能找到
 target_include_directories(btt_core PRIVATE
   ${CMAKE_SOURCE_DIR}
@@ -10,7 +14,14 @@ target_include_directories(btt_core PRIVATE
   ${CMAKE_SOURCE_DIR}/include
 )
 
+target_include_directories(upgraded PRIVATE
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/include
+)
+
 find_package(Threads REQUIRED)
+
+target_link_libraries(upgraded PRIVATE Threads::Threads)
 
 # 1) 外部静态库列表
 set(EXT_MEDIA_LIBS
