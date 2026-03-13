@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LIBS_NET_TCP_CLIENT_HPP_
+#define LIBS_NET_TCP_CLIENT_HPP_
+
 #include <string>
 #include <cstdint>
 #include <unistd.h>
@@ -11,7 +13,7 @@
 namespace btt::net {
 
 class TcpClient {
-public:
+ public:
   ~TcpClient() { close_fd(); }
 
   bool connect_to(const std::string& ip, uint16_t port, int timeout_ms = 3000) {
@@ -60,6 +62,7 @@ public:
       ssize_t s = ::send(fd_, buf + off, n - off, 0);
       if (s > 0) { off += size_t(s); continue; }
       if (errno == EINTR) continue;
+      if (errno == EAGAIN || errno == EWOULDBLOCK) continue;
       return false;
     }
     return true;
@@ -70,16 +73,24 @@ public:
     if (fd_ >= 0) { ::close(fd_); fd_ = -1; }
   }
 
-private:
+ private:
   void finalize_socket() {
     int flags = ::fcntl(fd_, F_GETFL, 0);
     ::fcntl(fd_, F_SETFL, flags & ~O_NONBLOCK);
     int one = 1;
     ::setsockopt(fd_, IPPROTO_TCP, TCP_NODELAY, &one, sizeof(one));
     ::setsockopt(fd_, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof(one));
+
+    timeval tv{};
+    tv.tv_sec = 0;
+    tv.tv_usec = 200 * 1000;
+    ::setsockopt(fd_, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+    ::setsockopt(fd_, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
   }
 
   int fd_{-1};
 };
 
-} 
+}  // namespace btt::net
+
+#endif  // LIBS_NET_TCP_CLIENT_HPP_

@@ -5,6 +5,7 @@ add_executable(btt_core
 
 add_executable(upgraded
   upgraded/main.cpp
+  upgraded/upgraded.cpp
 )
 
 # 关键：让 #include "libs/xxx/yyy.hpp" 能找到

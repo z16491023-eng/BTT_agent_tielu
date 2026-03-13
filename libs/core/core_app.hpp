@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LIBS_CORE_CORE_APP_HPP_
+#define LIBS_CORE_CORE_APP_HPP_
+
 #include <atomic>
 #include <thread>
 #include <string>
@@ -25,6 +27,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <linux/route.h>
@@ -49,6 +52,7 @@ extern "C" {
 #include "libs/utils/blocking_queue.hpp"
 #include "libs/proto/btt_proto.hpp"
 #include "libs/net/tcp_client.hpp"
+#include "upgraded/watchdog_protocol.h"
 
 namespace btt::core {
 
@@ -58,6 +62,64 @@ using namespace std::chrono;
 inline int64_t now_ms_steady() {
   return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
 }
+
+inline uint32_t age_ms_from(int64_t now_ms, int64_t last_ms) {
+  if (last_ms <= 0 || now_ms <= last_ms) return 0;
+  const int64_t delta = now_ms - last_ms;
+  return static_cast<uint32_t>(
+      (delta > static_cast<int64_t>(UINT32_MAX)) ? UINT32_MAX : delta);
+}
+
+class UpgradedWatchdogClient {
+ public:
+  ~UpgradedWatchdogClient() { Close(); }
+
+  bool SendPing(const upgraded::WatchdogPingV1& ping) {
+    if (fd_ < 0 && !Connect()) return false;
+
+    const ssize_t rc =
+        ::send(fd_, &ping, sizeof(ping), MSG_DONTWAIT | MSG_NOSIGNAL);
+    if (rc == static_cast<ssize_t>(sizeof(ping))) return true;
+
+    if (rc < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) return false;
+    Close();
+    return false;
+  }
+
+ private:
+  bool Connect() {
+    Close();
+
+    fd_ = ::socket(AF_UNIX, SOCK_SEQPACKET | SOCK_CLOEXEC, 0);
+    if (fd_ < 0) return false;
+
+    const int flags = ::fcntl(fd_, F_GETFL, 0);
+    if (flags >= 0) {
+      (void)::fcntl(fd_, F_SETFL, flags | O_NONBLOCK);
+    }
+
+    sockaddr_un addr{};
+    addr.sun_family = AF_UNIX;
+    std::snprintf(addr.sun_path, sizeof(addr.sun_path), "%s",
+                  upgraded::kWatchdogSockPath);
+
+    const int rc = ::connect(fd_, reinterpret_cast<sockaddr*>(&addr),
+                             sizeof(addr));
+    if (rc == 0 || errno == EISCONN) return true;
+
+    Close();
+    return false;
+  }
+
+  void Close() {
+    if (fd_ >= 0) {
+      ::close(fd_);
+      fd_ = -1;
+    }
+  }
+
+  int fd_ = -1;
+};
 
 // 新增 ID 规则：
 // - 事件 ID: 高 4bit = 0x1
@@ -181,6 +243,11 @@ struct RuntimeConfig {
   std::atomic<int64_t> last_rx_ms{0};
   std::atomic<int64_t> last_hb_tx_ms{0};
   std::atomic<int64_t> last_auth_tx_ms{0};
+  std::atomic<int64_t> wd_net_rx_ms{0};
+  std::atomic<int64_t> wd_actor_ms{0};
+  std::atomic<int64_t> wd_net_tx_ms{0};
+  std::atomic<int64_t> wd_timer_ms{0};
+  std::atomic<uint32_t> wd_ping_seq{1};
 
   // 媒体参数（用于容量模型/准入控制）
   std::atomic<uint16_t> video_bitrate_kbps{560}; // 默认 560kbps，上位机可配置（>1024 将拒绝）
@@ -4659,12 +4726,65 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   media.set_streamer(&streamer);
 
   std::atomic<bool> stop{false};
+  UpgradedWatchdogClient watchdog_client;
+  int64_t last_watchdog_tx_ms = 0;
+  constexpr uint32_t kTimerWatchdogStepMs = 50;
+  constexpr int kReconnectConnectTimeoutMs = 500;
 
   // init runtime
   rt.switch_model.store(def.switch_model);
   rt.last_rx_ms.store(now_ms_steady());
   rt.last_hb_tx_ms.store(now_ms_steady());
+  rt.wd_net_rx_ms.store(now_ms_steady());
+  rt.wd_actor_ms.store(now_ms_steady());
+  rt.wd_net_tx_ms.store(now_ms_steady());
+  rt.wd_timer_ms.store(now_ms_steady());
   
+  auto service_timer_watchdog = [&] {
+    const int64_t now = now_ms_steady();
+    rt.wd_timer_ms.store(now);
+
+    if (now - last_watchdog_tx_ms < upgraded::kWatchdogHeartbeatIntervalMs) {
+      return;
+    }
+
+    upgraded::WatchdogPingV1 ping{};
+    upgraded::InitWatchdogPing(&ping);
+    ping.seq = rt.wd_ping_seq.fetch_add(1);
+    ping.pid = static_cast<uint32_t>(::getpid());
+    ping.monotonic_ms = static_cast<uint64_t>(now);
+    ping.flags = 0;
+    if (rt.connected.load()) ping.flags |= upgraded::kWatchdogFlagConnected;
+    if (rt.authed.load()) ping.flags |= upgraded::kWatchdogFlagAuthed;
+    ping.thread_bitmap = upgraded::kWatchdogThreadMaskRequired;
+    ping.net_rx_age_ms = age_ms_from(now, rt.wd_net_rx_ms.load());
+    ping.actor_age_ms = age_ms_from(now, rt.wd_actor_ms.load());
+    ping.net_tx_age_ms = age_ms_from(now, rt.wd_net_tx_ms.load());
+    ping.timer_age_ms = age_ms_from(now, rt.wd_timer_ms.load());
+    (void)watchdog_client.SendPing(ping);
+    last_watchdog_tx_ms = now;
+  };
+
+  auto timer_wait_watchdog_friendly = [&](uint32_t wait_ms) {
+    uint32_t remaining_ms = wait_ms;
+    while (!stop.load()) {
+      if (stop_flag.load()) {
+        stop.store(true);
+        inbound.notify_all();
+        outbound.notify_all();
+        return false;
+      }
+
+      service_timer_watchdog();
+      if (remaining_ms == 0) return true;
+
+      const uint32_t step_ms = std::min<uint32_t>(remaining_ms, kTimerWatchdogStepMs);
+      std::this_thread::sleep_for(milliseconds(step_ms));
+      remaining_ms -= step_ms;
+    }
+    return false;
+  };
+
 
   auto disconnect = [&](uint8_t reason){
     LOGW("DISCONNECT reason=%u", reason);
@@ -4685,7 +4805,7 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   std::thread t_rx([&]{
     uint8_t buf[2048];
     while (!stop.load()) {
-
+      rt.wd_net_rx_ms.store(now_ms_steady());
 
       if (!rt.connected.load()) { std::this_thread::sleep_for(50ms); continue; }
 
@@ -4693,6 +4813,7 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
       if (n > 0) {
         rt.last_rx_ms.store(now_ms_steady());
         rt.hb_miss.store(0);
+        rt.wd_net_rx_ms.store(now_ms_steady());
 
         auto frames = decoder.push(buf, (size_t)n);
         for (auto& fr : frames) inbound.push(std::move(fr));
@@ -4701,6 +4822,10 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
 
       if (n == 0) { disconnect(14); continue; }
       if (errno == EINTR) continue;
+      if (errno == EAGAIN || errno == EWOULDBLOCK) {
+        rt.wd_net_rx_ms.store(now_ms_steady());
+        continue;
+      }
       if (errno == ECONNRESET) disconnect(15);
       else disconnect(16);
     }
@@ -4709,16 +4834,21 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   // Actor
   std::thread t_actor([&]{
     while (!stop.load()) {
+      rt.wd_actor_ms.store(now_ms_steady());
 
-
-      auto opt = inbound.pop_wait(stop);
-      if (!opt.has_value()) break;
+      auto opt = inbound.pop_wait_for(stop, 200ms);
+      if (!opt.has_value()) {
+        if (stop.load()) break;
+        rt.wd_actor_ms.store(now_ms_steady());
+        continue;
+      }
       const auto& fr = *opt;
 
 
 
       // 开发期打印：优先看是否协议对齐（cmd/level/seq/len + raw）
       log_frame_detail("RX", fr);
+      rt.wd_actor_ms.store(now_ms_steady());
 
       // 设备侧：收到0x00/0x01 一律按服务器应答处理
       if (fr.cmd == 0x00) {
@@ -4795,10 +4925,14 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   // NetTx
   std::thread t_tx([&]{
     while (!stop.load()) {
+      rt.wd_net_tx_ms.store(now_ms_steady());
 
-
-      auto opt = outbound.pop_wait(stop);
-      if (!opt.has_value()) break;
+      auto opt = outbound.pop_wait_for(stop, 200ms);
+      if (!opt.has_value()) {
+        if (stop.load()) break;
+        rt.wd_net_tx_ms.store(now_ms_steady());
+        continue;
+      }
       if (!rt.connected.load()) continue;
 
       // 编码前打印
@@ -4812,6 +4946,8 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
 
       if (!cli.send_all(bytes.data(), bytes.size())) {
         disconnect(16);
+      } else {
+        rt.wd_net_tx_ms.store(now_ms_steady());
       }
     }
   });
@@ -4819,8 +4955,7 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   // Timer：连接/认证/心跳
   std::thread t_timer([&]{
     while (!stop.load()) {
-
-      if (stop_flag.load()) { stop.store(true); inbound.notify_all(); outbound.notify_all(); break; }
+      if (!timer_wait_watchdog_friendly(0)) break;
 
       // M8：事件超时触发（只触发一次，交由 actor 串行收尾）
       {
@@ -4846,25 +4981,29 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
 
       if (rt.force_disconnect.exchange(false)) {
         disconnect(rt.force_disconnect_reason.load());
-        std::this_thread::sleep_for(200ms);
+        if (!timer_wait_watchdog_friendly(200)) break;
         continue;
       }
 
       if (rt.reconnect_disabled.load()) {
-        std::this_thread::sleep_for(200ms);
+        if (!timer_wait_watchdog_friendly(200)) break;
         continue;
       }
 
       if (!rt.connected.load()) {
         const uint8_t ri = rt.reconnect_interval_s.load();
-        if (ri == 0) { std::this_thread::sleep_for(200ms); continue; }
+        if (ri == 0) {
+          if (!timer_wait_watchdog_friendly(200)) break;
+          continue;
+        }
 
         {
         const uint32_t hip = rt.m5_host_ip_be.load();
         const uint16_t hpt = rt.m5_host_port.load();
         const std::string host_ip = ip_be_to_string(hip);
         LOGI("CONNECT to %s:%u ...", host_ip.c_str(), hpt);
-        if (cli.connect_to(host_ip, hpt, 3000)) {
+        service_timer_watchdog();
+        if (cli.connect_to(host_ip, hpt, kReconnectConnectTimeoutMs)) {
           LOGI("CONNECTED");
           rt.connected.store(true);
           rt.authed.store(false);
@@ -4877,7 +5016,9 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
           outbound.push(std::move(auth));
         } else {
           LOGW("CONNECT FAIL, sleep %us", ri);
-          std::this_thread::sleep_for(std::chrono::seconds(ri));
+          if (!timer_wait_watchdog_friendly(static_cast<uint32_t>(ri) * 1000u)) {
+            break;
+          }
         }
         }
         continue;
@@ -4889,7 +5030,7 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
         if (now - rt.last_auth_tx_ms.load() > def.auth_timeout_ms) {
           disconnect(20);
         }
-        std::this_thread::sleep_for(50ms);
+        if (!timer_wait_watchdog_friendly(50)) break;
         continue;
       }
 
@@ -4921,7 +5062,7 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
       // M7：实时流 keepalive 检查
       streamer.tick_keepalive();
 
-      std::this_thread::sleep_for(50ms);
+      if (!timer_wait_watchdog_friendly(50)) break;
     }
   });
 
@@ -5062,4 +5203,6 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   return 0;
 }
 
-} // namespace btt::core
+}  // namespace btt::core
+
+#endif  // LIBS_CORE_CORE_APP_HPP_

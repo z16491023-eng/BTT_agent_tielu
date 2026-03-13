@@ -192,6 +192,30 @@ upgraded/main.cpp.s:
 	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/main.cpp.s
 .PHONY : upgraded/main.cpp.s
 
+upgraded/upgraded.o: upgraded/upgraded.cpp.o
+.PHONY : upgraded/upgraded.o
+
+# target to build an object file
+upgraded/upgraded.cpp.o:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.o
+.PHONY : upgraded/upgraded.cpp.o
+
+upgraded/upgraded.i: upgraded/upgraded.cpp.i
+.PHONY : upgraded/upgraded.i
+
+# target to preprocess a source file
+upgraded/upgraded.cpp.i:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.i
+.PHONY : upgraded/upgraded.cpp.i
+
+upgraded/upgraded.s: upgraded/upgraded.cpp.s
+.PHONY : upgraded/upgraded.s
+
+# target to generate assembly for a file
+upgraded/upgraded.cpp.s:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.s
+.PHONY : upgraded/upgraded.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -208,6 +232,9 @@ help:
 	@echo "... upgraded/main.o"
 	@echo "... upgraded/main.i"
 	@echo "... upgraded/main.s"
+	@echo "... upgraded/upgraded.o"
+	@echo "... upgraded/upgraded.i"
+	@echo "... upgraded/upgraded.s"
 .PHONY : help
 
 

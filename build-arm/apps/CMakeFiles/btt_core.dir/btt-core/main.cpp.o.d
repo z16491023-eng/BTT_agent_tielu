@@ -254,6 +254,7 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_deque.h \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/deque.tcc \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstddef \
+ /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/un.h \
  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ioctl.h \
  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h \
  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/ioctls.h \
@@ -320,4 +321,5 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/enable_special_members.h \
  /home/li/hi_project/Btt-agent/libs/proto/btt_proto.hpp \
  /home/li/hi_project/Btt-agent/libs/net/tcp_client.hpp \
- /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/tcp.h
+ /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/tcp.h \
+ /home/li/hi_project/Btt-agent/include/upgraded/watchdog_protocol.h

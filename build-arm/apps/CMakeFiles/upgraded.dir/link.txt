@@ -1,1 +1,1 @@
-/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ -O3 -DNDEBUG CMakeFiles/upgraded.dir/upgraded/main.cpp.o -o ../bin/upgraded  -lpthread 
+/opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ -O3 -DNDEBUG CMakeFiles/upgraded.dir/upgraded/main.cpp.o CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.o -o ../bin/upgraded  -lpthread 

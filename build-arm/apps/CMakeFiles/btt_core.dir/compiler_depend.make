@@ -256,6 +256,7 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/stl_deque.h \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/deque.tcc \
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstddef \
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/un.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/ioctl.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h \
   /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/ioctls.h \
@@ -322,8 +323,11 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
   /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/enable_special_members.h \
   /home/li/hi_project/Btt-agent/libs/proto/btt_proto.hpp \
   /home/li/hi_project/Btt-agent/libs/net/tcp_client.hpp \
-  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/tcp.h
+  /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/netinet/tcp.h \
+  /home/li/hi_project/Btt-agent/include/upgraded/watchdog_protocol.h
 
+
+/home/li/hi_project/Btt-agent/include/upgraded/watchdog_protocol.h:
 
 /home/li/hi_project/Btt-agent/libs/proto/btt_proto.hpp:
 
@@ -585,6 +589,10 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stdio.h:
 
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h:
+
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno.h:
+
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/exception_ptr.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/basic_string.tcc:
@@ -651,6 +659,8 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/posix1_lim.h:
 
+/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/un.h:
+
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm/socket.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/arm-linux-gnueabi/bits/gthr.h:
@@ -670,10 +680,6 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o: /home/li/hi_project/Btt-agent/
 /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/ext/new_allocator.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/sys/cdefs.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/asm-generic/errno.h:
-
-/opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/ioctls.h:
 
 /opt/linux/x86-arm/arm-mix410-linux/target/usr/include/bits/stat.h:
 
