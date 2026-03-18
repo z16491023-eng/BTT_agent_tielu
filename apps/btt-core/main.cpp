@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <sys/reboot.h>
+#include <unistd.h>
 #include <string>
 #include <utility>
 #include "libs/core/core_app.hpp"
@@ -28,9 +30,9 @@ static void print_usage(const char* prog) {
                "Usage: %s [IP[:PORT] | IP PORT | PORT | --server=IP[:PORT]]\n"
                "Examples:\n"
                "  %s\n"
-               "  %s 192.168.1.200:9000\n"
-               "  %s 192.168.1.200 9000\n"
-               "  %s 9000\n",
+               "  %s 192.168.14.250:18502\n"
+               "  %s 192.168.14.250 18502\n"
+               "  %s 18502\n",
                prog, prog, prog, prog, prog);
 }
 
@@ -93,7 +95,7 @@ static ParseResult parse_server_override(int argc, char** argv, btt::core::Defau
     return ParseResult::kHelp;
   }
 
-  // 允许写成: ./btt_core +192.168.1.200:9000
+  // 允许写成: ./btt_core +192.168.14.250:18502
   if (!arg1.empty() && arg1.front() == '+') arg1.erase(arg1.begin());
 
   std::string ip = def.server_ip;
@@ -157,5 +159,21 @@ int main(int argc, char** argv) {
   LOGI("Boot server target: %s:%u", def.server_ip.c_str(), def.server_port);
   btt::core::RuntimeConfig rt;
 
-  return btt::core::run_core(def, rt, g_stop);
+  const int rc = btt::core::run_core(def, rt, g_stop);
+  if (rc == btt::core::kRunCoreExitRestartProgram) {
+    ::execv("/proc/self/exe", argv);
+    std::fprintf(stderr, "execv restart failed: %s\n", std::strerror(errno));
+    return 3;
+  }
+
+  if (rc == btt::core::kRunCoreExitRebootDevice) {
+    ::sync();
+    if (::reboot(RB_AUTOBOOT) != 0) {
+      std::fprintf(stderr, "reboot failed: %s\n", std::strerror(errno));
+      return 4;
+    }
+    return 0;
+  }
+
+  return rc;
 }

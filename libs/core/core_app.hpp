@@ -138,6 +138,32 @@ inline uint32_t alloc_tagged_id(std::atomic<uint32_t>& seq, uint32_t tag) {
   return make_tagged_id(raw, tag);
 }
 
+enum class CoreControlAction : uint8_t {
+  None = 0,
+  RebootDevice = 1,
+  RestartProgram = 2,
+};
+
+static constexpr int kRunCoreExitRestartProgram = 64;
+static constexpr int kRunCoreExitRebootDevice = 65;
+
+static constexpr const char* kFactoryServerIpStr = "192.168.14.250";
+static constexpr uint32_t kFactoryServerIpBe = 0xC0A80EFAu;   // 192.168.14.250
+static constexpr uint32_t kFactoryDevIpBe = 0xC0A80E26u;      // 192.168.14.38
+static constexpr uint32_t kFactoryGatewayIpBe = 0xC0A80E01u;  // 192.168.14.1
+static constexpr uint32_t kFactoryNetmaskBe = 0xFFFFFF00u;    // 255.255.255.0
+static constexpr uint8_t kFactoryMediaPicRes = 3;
+static constexpr uint8_t kFactoryMediaPicQuality = 75;
+static constexpr uint8_t kFactoryMediaVideoRes = 3;
+static constexpr uint8_t kFactoryMediaVideoFps = 25;
+static constexpr uint8_t kFactoryMediaVideoBitrateUnit = 17;
+static constexpr uint8_t kFactoryHbIntervalS = 5;
+static constexpr uint8_t kFactoryBusinessTimeoutS = 0;
+static constexpr uint8_t kFactoryReconnectIntervalS = 5;
+static constexpr uint8_t kFactoryNoCommRebootS = 0;
+static constexpr uint8_t kFactoryTriggerMode = 1;
+static constexpr uint8_t kFactoryMeasureIntervalMin = 30;
+
 
 struct EventMetaV1 {
   uint8_t ver = 1;
@@ -201,8 +227,8 @@ inline void log_frame_detail(const char* dir, const btt::proto::Frame& fr) {
 
 // ---------- 配置结构 ----------
 struct DefaultConfig {
-  std::string server_ip = "192.168.1.200";
-  uint16_t server_port = 9000;
+  std::string server_ip = kFactoryServerIpStr;
+  uint16_t server_port = 18502;
 
   // 设备序列号 5B
   uint8_t sn_model = 0x00;
@@ -250,12 +276,12 @@ struct RuntimeConfig {
   std::atomic<uint32_t> wd_ping_seq{1};
 
   // 媒体参数（用于容量模型/准入控制）
-  std::atomic<uint16_t> video_bitrate_kbps{560}; // 默认 560kbps，上位机可配置（>1024 将拒绝）
+  std::atomic<uint16_t> video_bitrate_kbps{560}; // 默认 unit=17，对应现网默认 560kbps
 
 
   // 0x20 原始配置 36B
   std::atomic<bool> devcfg_valid{false};
-  std::mutex devcfg_mu;
+  mutable std::mutex devcfg_mu;
   std::array<uint8_t, 36> devcfg_raw{};
 
   // ---------------- M5：网络/媒体/测量配置 ----------------
@@ -277,7 +303,7 @@ struct RuntimeConfig {
   std::atomic<uint8_t> m5_pic_quality{75};
   std::atomic<uint8_t> m5_video_res{3};
   std::atomic<uint8_t> m5_video_fps{25};
-  std::atomic<uint8_t> m5_video_bitrate_unit{18}; // 18*32=576kbps
+  std::atomic<uint8_t> m5_video_bitrate_unit{kFactoryMediaVideoBitrateUnit}; // 默认 17
 
   // 0x38 周期测量配置
   std::atomic<bool>     m5_measure_periodic{false};
@@ -317,6 +343,7 @@ struct RuntimeConfig {
 
 // 前置声明（M5 持久化依赖）
 inline bool ensure_dir(const std::string& path);
+inline uint16_t bitrate_unit_to_kbps(uint8_t unit);
 
 // ---------------- M5：持久化配置（/data/m5_cfg.bin） ----------------
 static constexpr const char* kM5CfgPath = "/data/m5_cfg.bin";
@@ -752,7 +779,7 @@ inline void m5_load_into_runtime(const DefaultConfig& def, RuntimeConfig& rt) {
     rt.m5_video_res.store(cfg.video_res);
     rt.m5_video_fps.store(cfg.video_fps);
     rt.m5_video_bitrate_unit.store(cfg.video_bitrate_unit);
-    rt.video_bitrate_kbps.store(uint16_t(cfg.video_bitrate_unit) * 32u);
+    rt.video_bitrate_kbps.store(bitrate_unit_to_kbps(cfg.video_bitrate_unit));
 
     rt.m5_measure_interval_min.store(cfg.measure_interval_min);
 
@@ -798,9 +825,19 @@ inline void m5_load_into_runtime(const DefaultConfig& def, RuntimeConfig& rt) {
   }
   if (rt.m5_host_port.load() == 0) rt.m5_host_port.store(def.server_port);
 
+  // 设备侧网络参数默认回落到出厂值，避免首次启动/无持久化时 eth0 不被配置
+  if (rt.m5_dev_ip_be.load() == 0) rt.m5_dev_ip_be.store(kFactoryDevIpBe);
+  if (rt.m5_gateway_be.load() == 0) rt.m5_gateway_be.store(kFactoryGatewayIpBe);
+  if (rt.m5_netmask_be.load() == 0) rt.m5_netmask_be.store(kFactoryNetmaskBe);
+
   // media 默认回落
-  if (rt.m5_video_bitrate_unit.load() == 0) rt.m5_video_bitrate_unit.store(18);
-  if (rt.video_bitrate_kbps.load() == 0) rt.video_bitrate_kbps.store(uint16_t(rt.m5_video_bitrate_unit.load()) * 32u);
+  if (rt.m5_video_bitrate_unit.load() == 0) {
+    rt.m5_video_bitrate_unit.store(kFactoryMediaVideoBitrateUnit);
+  }
+  if (rt.video_bitrate_kbps.load() == 0) {
+    rt.video_bitrate_kbps.store(
+        bitrate_unit_to_kbps(rt.m5_video_bitrate_unit.load()));
+  }
   if (rt.m5_video_fps.load() == 0) rt.m5_video_fps.store(25);
   if (rt.m5_pic_quality.load() == 0) rt.m5_pic_quality.store(75);
 
@@ -880,6 +917,11 @@ inline bool m5_persist_save(const RuntimeConfig& rt) {
   M5PersistV1 cfg{};
   m5_snapshot_runtime_to_persist(rt, cfg);
   return m5_write_persist(cfg);
+}
+
+inline uint16_t bitrate_unit_to_kbps(uint8_t unit) {
+  if (unit == 17) return 560;
+  return uint16_t(unit) * 32u;
 }
 
 
@@ -1180,6 +1222,8 @@ inline void handle_set_devcfg_req(const btt::proto::Frame& fr, RuntimeConfig& rt
 
 inline void handle_get_devcfg_req(const btt::proto::Frame& fr, RuntimeConfig& rt,
                                   btt::utils::BlockingQueue<btt::proto::Frame>& outbound) {
+  uint8_t result = 0x00;
+  uint8_t reason = 0x00;
   if (!fr.payload.empty()) {
     LOGW("0x21 GET_DEVCFG: payload not empty (len=%zu), ignore", fr.payload.size());
   }
@@ -1196,7 +1240,10 @@ inline void handle_get_devcfg_req(const btt::proto::Frame& fr, RuntimeConfig& rt
   resp.cmd = 0x21;
   resp.level = 0x01; // 设备->上位机 应答
   resp.seq = fr.seq;
-  resp.payload.assign(c.begin(), c.end());
+  resp.payload.reserve(2 + c.size());
+  resp.payload.push_back(result);
+  resp.payload.push_back(reason);
+  resp.payload.insert(resp.payload.end(), c.begin(), c.end());
 
   LOGI("0x21 GET_DEVCFG RESP (seq=%u)", fr.seq);
   log_devcfg_fields(c);
@@ -2506,12 +2553,251 @@ inline void append_ip_be(std::vector<uint8_t>& out, uint32_t ip_be) {
   append_u32_be(out, ip_be);
 }
 
+struct FactoryResetSnapshot {
+  M5PersistV1 m5_cfg{};
+  bool measure_periodic = false;
+  bool devcfg_valid = false;
+  std::array<uint8_t, kDevCfgLen> devcfg_raw{};
+  uint8_t switch_model = 0x01;
+  uint8_t hb_interval_s = kFactoryHbIntervalS;
+  uint8_t business_timeout_s = kFactoryBusinessTimeoutS;
+  uint8_t reconnect_interval_s = kFactoryReconnectIntervalS;
+  uint8_t no_comm_reboot_s = kFactoryNoCommRebootS;
+};
+
+inline void snapshot_factory_reset_state(const RuntimeConfig& rt,
+                                         FactoryResetSnapshot& out) {
+  m5_snapshot_runtime_to_persist(rt, out.m5_cfg);
+  out.measure_periodic = rt.m5_measure_periodic.load();
+  out.switch_model = rt.switch_model.load();
+  out.hb_interval_s = rt.hb_interval_s.load();
+  out.business_timeout_s = rt.business_timeout_s.load();
+  out.reconnect_interval_s = rt.reconnect_interval_s.load();
+  out.no_comm_reboot_s = rt.no_comm_reboot_s.load();
+  out.devcfg_valid = rt.devcfg_valid.load();
+  std::lock_guard<std::mutex> lk(rt.devcfg_mu);
+  out.devcfg_raw = rt.devcfg_raw;
+}
+
+inline void restore_factory_reset_state(const FactoryResetSnapshot& snapshot,
+                                        RuntimeConfig& rt) {
+  const M5PersistV1& cfg = snapshot.m5_cfg;
+
+  rt.m5_dev_ip_be.store(cfg.dev_ip_be);
+  rt.m5_gateway_be.store(cfg.gateway_be);
+  rt.m5_netmask_be.store(cfg.netmask_be);
+  rt.m5_host_ip_be.store(cfg.host_ip_be);
+  rt.m5_host_port.store(cfg.host_port);
+  rt.m5_upgrade_server_ip_be.store(cfg.upgrade_ip_be);
+  rt.m5_debug_server_ip_be.store(cfg.debug_ip_be);
+  rt.m5_debug_server_port.store(cfg.debug_port);
+  rt.m5_debug_proto.store(cfg.debug_proto);
+  rt.m5_pic_res.store(cfg.pic_res);
+  rt.m5_pic_quality.store(cfg.pic_quality);
+  rt.m5_video_res.store(cfg.video_res);
+  rt.m5_video_fps.store(cfg.video_fps);
+  rt.m5_video_bitrate_unit.store(cfg.video_bitrate_unit);
+  rt.video_bitrate_kbps.store(bitrate_unit_to_kbps(cfg.video_bitrate_unit));
+  rt.m5_measure_interval_min.store(cfg.measure_interval_min);
+  rt.m5_measure_periodic.store(snapshot.measure_periodic);
+  rt.m8_switch_trigger.store(cfg.m8_switch_trigger);
+  rt.m8_pass_trigger.store(cfg.m8_pass_trigger);
+  {
+    std::lock_guard<std::mutex> lk(rt.m8_mu);
+    std::memcpy(rt.m8_strategy_raw0.data(), cfg.m8_strategy_raw0, 73);
+    std::memcpy(rt.m8_strategy_raw1.data(), cfg.m8_strategy_raw1, 73);
+  }
+  m8_apply_effective_from_strategy_raw(0, cfg.m8_strategy_raw0, rt);
+  m8_apply_effective_from_strategy_raw(1, cfg.m8_strategy_raw1, rt);
+
+  rt.switch_model.store(snapshot.switch_model);
+  rt.hb_interval_s.store(snapshot.hb_interval_s);
+  rt.business_timeout_s.store(snapshot.business_timeout_s);
+  rt.reconnect_interval_s.store(snapshot.reconnect_interval_s);
+  rt.no_comm_reboot_s.store(snapshot.no_comm_reboot_s);
+
+  std::lock_guard<std::mutex> lk(rt.devcfg_mu);
+  rt.devcfg_raw = snapshot.devcfg_raw;
+  rt.devcfg_valid.store(snapshot.devcfg_valid);
+}
+
+inline bool apply_factory_defaults(const DefaultConfig& def, RuntimeConfig& rt,
+                                   MediaManager& media) {
+  FactoryResetSnapshot snapshot{};
+  snapshot_factory_reset_state(rt, snapshot);
+
+  uint8_t raw0[73]{};
+  uint8_t raw1[73]{};
+  m8_fill_default_strategy_raw(0, raw0);
+  m8_fill_default_strategy_raw(1, raw1);
+
+  rt.m5_dev_ip_be.store(kFactoryDevIpBe);
+  rt.m5_gateway_be.store(kFactoryGatewayIpBe);
+  rt.m5_netmask_be.store(kFactoryNetmaskBe);
+  rt.m5_host_ip_be.store(kFactoryServerIpBe);
+  rt.m5_host_port.store(def.server_port);
+  rt.m5_pic_res.store(kFactoryMediaPicRes);
+  rt.m5_pic_quality.store(kFactoryMediaPicQuality);
+  rt.m5_video_res.store(kFactoryMediaVideoRes);
+  rt.m5_video_fps.store(kFactoryMediaVideoFps);
+  rt.m5_video_bitrate_unit.store(kFactoryMediaVideoBitrateUnit);
+  rt.video_bitrate_kbps.store(bitrate_unit_to_kbps(kFactoryMediaVideoBitrateUnit));
+  rt.m5_measure_periodic.store(false);
+  rt.m5_measure_interval_min.store(kFactoryMeasureIntervalMin);
+
+  rt.switch_model.store(def.switch_model);
+  rt.hb_interval_s.store(kFactoryHbIntervalS);
+  rt.business_timeout_s.store(kFactoryBusinessTimeoutS);
+  rt.reconnect_interval_s.store(kFactoryReconnectIntervalS);
+  rt.no_comm_reboot_s.store(kFactoryNoCommRebootS);
+
+  {
+    std::lock_guard<std::mutex> lk(rt.devcfg_mu);
+    rt.devcfg_raw.fill(0);
+    rt.devcfg_valid.store(false);
+  }
+
+  rt.m8_switch_trigger.store(kFactoryTriggerMode);
+  rt.m8_pass_trigger.store(kFactoryTriggerMode);
+  {
+    std::lock_guard<std::mutex> lk(rt.m8_mu);
+    std::memcpy(rt.m8_strategy_raw0.data(), raw0, 73);
+    std::memcpy(rt.m8_strategy_raw1.data(), raw1, 73);
+  }
+  m8_apply_effective_from_strategy_raw(0, raw0, rt);
+  m8_apply_effective_from_strategy_raw(1, raw1, rt);
+
+  if (!media.apply_video_params_from_rt(rt)) {
+    restore_factory_reset_state(snapshot, rt);
+    (void)media.apply_video_params_from_rt(rt);
+    return false;
+  }
+
+  if (!m5_persist_save(rt)) {
+    restore_factory_reset_state(snapshot, rt);
+    (void)media.apply_video_params_from_rt(rt);
+    return false;
+  }
+
+  LOGI("0x16 FACTORY defaults applied: host=%s:%u dev=%s gw=%s mask=%s",
+       ip_be_to_string(rt.m5_host_ip_be.load()).c_str(), rt.m5_host_port.load(),
+       ip_be_to_string(rt.m5_dev_ip_be.load()).c_str(),
+       ip_be_to_string(rt.m5_gateway_be.load()).c_str(),
+       ip_be_to_string(rt.m5_netmask_be.load()).c_str());
+  return true;
+}
+
+inline void handle_control_16_req(const btt::proto::Frame& fr,
+                                  const DefaultConfig& def,
+                                  RuntimeConfig& rt,
+                                  MediaManager& media,
+                                  std::atomic<uint8_t>& pending_control_action,
+                                  std::atomic<uint16_t>& pending_control_seq,
+                                  btt::utils::BlockingQueue<btt::proto::Frame>& outbound) {
+  uint8_t result = 0x00;
+  uint8_t reason = 0x00;
+  CoreControlAction action = CoreControlAction::None;
+
+  if (pending_control_action.load() !=
+      static_cast<uint8_t>(CoreControlAction::None)) {
+    result = 0x01;
+  } else if (fr.payload.size() != 1) {
+    result = 0x01;
+  } else if (fr.payload[0] == 0x00) {
+    action = CoreControlAction::RebootDevice;
+  } else if (fr.payload[0] == 0x01) {
+    if (!apply_factory_defaults(def, rt, media)) {
+      result = 0x01;
+    } else {
+      action = CoreControlAction::RestartProgram;
+    }
+  } else {
+    result = 0x01;
+  }
+
+  if (result == 0x00) {
+    pending_control_action.store(static_cast<uint8_t>(action));
+    pending_control_seq.store(fr.seq);
+    LOGI("0x16 CONTROL accepted: op=%u seq=%u action=%u",
+         unsigned(fr.payload[0]), fr.seq, unsigned(pending_control_action.load()));
+  } else {
+    pending_control_action.store(static_cast<uint8_t>(CoreControlAction::None));
+    pending_control_seq.store(0);
+    LOGW("0x16 CONTROL rejected: payload_len=%zu op=%u seq=%u",
+         fr.payload.size(),
+         fr.payload.empty() ? 0xFFu : unsigned(fr.payload[0]),
+         fr.seq);
+  }
+
+  outbound.push(make_resp_2b(0x16, fr.seq, result, reason));
+}
+
+struct PendingNetConfig {
+  uint32_t dev_ip = 0;
+  uint32_t gateway = 0;
+  uint32_t netmask = 0;
+  uint32_t host_ip = 0;
+  uint16_t host_port = 0;
+  uint32_t upgrade_ip = 0;
+  uint32_t debug_ip = 0;
+  uint16_t debug_port = 0;
+  uint8_t debug_proto = 0;
+  bool local_net_changed = false;
+  bool need_disconnect = false;
+};
+
+inline void commit_pending_net_config_after_ack(const PendingNetConfig& cfg,
+                                                RuntimeConfig& rt) {
+  if (cfg.local_net_changed) {
+    std::string err;
+    if (!apply_net_config_ioctl("eth0", cfg.dev_ip, cfg.netmask, cfg.gateway,
+                                err)) {
+      LOGW("0x11 SET_NET post-ack apply failed: %s", err.c_str());
+      return;
+    }
+  }
+
+  rt.m5_dev_ip_be.store(cfg.dev_ip);
+  rt.m5_gateway_be.store(cfg.gateway);
+  rt.m5_netmask_be.store(cfg.netmask);
+  rt.m5_host_ip_be.store(cfg.host_ip);
+  rt.m5_host_port.store(cfg.host_port);
+  rt.m5_upgrade_server_ip_be.store(cfg.upgrade_ip);
+  rt.m5_debug_server_ip_be.store(cfg.debug_ip);
+  rt.m5_debug_server_port.store(cfg.debug_port);
+  rt.m5_debug_proto.store(cfg.debug_proto);
+
+  if (!m5_persist_save(rt)) {
+    LOGW("0x11 SET_NET post-ack persist failed");
+  }
+
+  if (cfg.need_disconnect) {
+    rt.force_disconnect_reason.store(21);
+    rt.force_disconnect.store(true);
+  }
+
+  LOGI("0x11 SET_NET APPLIED after ACK: dev=%s gw=%s mask=%s host=%s:%u",
+       ip_be_to_string(cfg.dev_ip).c_str(),
+       ip_be_to_string(cfg.gateway).c_str(),
+       ip_be_to_string(cfg.netmask).c_str(),
+       ip_be_to_string(cfg.host_ip).c_str(),
+       cfg.host_port);
+}
+
 inline void handle_set_netparam_11_req(const btt::proto::Frame& fr, RuntimeConfig& rt,
+                                      std::mutex& pending_net_mu,
+                                      PendingNetConfig& pending_net_cfg,
+                                      std::atomic<bool>& pending_net_active,
+                                      std::atomic<uint16_t>& pending_net_seq,
                                       btt::utils::BlockingQueue<btt::proto::Frame>& outbound) {
   uint8_t result = 0x00;
   uint8_t reason = 0x00;
 
-  if (fr.payload.size() != 29) {
+  if (pending_net_active.load()) {
+    result = 0x01;
+    reason = 0x01;
+    LOGW("0x11 SET_NET rejected: previous network update still pending");
+  } else if (fr.payload.size() != 29) {
     LOGW("0x11 SET_NET: bad payload len=%zu (expect 29)", fr.payload.size());
     result = 0x01; reason = 0x01;
   } else {
@@ -2529,45 +2815,39 @@ inline void handle_set_netparam_11_req(const btt::proto::Frame& fr, RuntimeConfi
     if (dbg_pr > 1 || host_pt == 0) {
       result = 0x01; reason = 0x01;
     } else {
-      std::string err;
-      bool ok = apply_net_config_ioctl("eth0", dev_ip, mask, gw, err);
+      PendingNetConfig staged{};
+      staged.dev_ip = dev_ip;
+      staged.gateway = gw;
+      staged.netmask = mask;
+      staged.host_ip = host_ip;
+      staged.host_port = host_pt;
+      staged.upgrade_ip = upg_ip;
+      staged.debug_ip = dbg_ip;
+      staged.debug_port = dbg_pt;
+      staged.debug_proto = dbg_pr;
+      staged.local_net_changed =
+          (rt.m5_dev_ip_be.load() != dev_ip) ||
+          (rt.m5_gateway_be.load() != gw) ||
+          (rt.m5_netmask_be.load() != mask);
+      staged.need_disconnect =
+          staged.local_net_changed ||
+          (rt.m5_host_ip_be.load() != host_ip) ||
+          (rt.m5_host_port.load() != host_pt);
 
-     
-      if (!ok) {
-        result = 0x01; reason = 0x02;
-        LOGW("0x11 SET_NET: apply_net_config_ioctl failed: %s", err.c_str());
-      } else {
-        const bool need_reconnect =
-            (rt.m5_dev_ip_be.load() != dev_ip) ||
-            (rt.m5_gateway_be.load() != gw) ||
-            (rt.m5_netmask_be.load() != mask) ||
-            (rt.m5_host_ip_be.load() != host_ip) ||
-            (rt.m5_host_port.load() != host_pt);
-
-        rt.m5_dev_ip_be.store(dev_ip);
-        rt.m5_gateway_be.store(gw);
-        rt.m5_netmask_be.store(mask);
-        rt.m5_host_ip_be.store(host_ip);
-        rt.m5_host_port.store(host_pt);
-        rt.m5_upgrade_server_ip_be.store(upg_ip);
-        rt.m5_debug_server_ip_be.store(dbg_ip);
-        rt.m5_debug_server_port.store(dbg_pt);
-        rt.m5_debug_proto.store(dbg_pr);
-
-        (void)m5_persist_save(rt);
-
-        // 仅当关键网络参数变化时，才让连接线程断链重连
-        if (need_reconnect) {
-          rt.force_disconnect_reason.store(21);
-          rt.force_disconnect.store(true);
-        } else {
-          LOGI("0x11 SET_NET idempotent: params unchanged, skip reconnect");
-        }
-
-        LOGI("0x11 SET_NET OK: dev=%s gw=%s mask=%s host=%s:%u",
-             ip_be_to_string(dev_ip).c_str(), ip_be_to_string(gw).c_str(), ip_be_to_string(mask).c_str(),
-             ip_be_to_string(host_ip).c_str(), host_pt);
+      {
+        std::lock_guard<std::mutex> lk(pending_net_mu);
+        pending_net_cfg = staged;
       }
+      pending_net_seq.store(fr.seq);
+      pending_net_active.store(true);
+
+      LOGI("0x11 SET_NET staged before ACK: dev=%s gw=%s mask=%s host=%s:%u need_disconnect=%u",
+           ip_be_to_string(dev_ip).c_str(),
+           ip_be_to_string(gw).c_str(),
+           ip_be_to_string(mask).c_str(),
+           ip_be_to_string(host_ip).c_str(),
+           host_pt,
+           staged.need_disconnect ? 1u : 0u);
     }
   }
 
@@ -2639,7 +2919,7 @@ inline void handle_set_media_1A_req(const btt::proto::Frame& fr, RuntimeConfig& 
     if ( !map_res_code_to_hif(vid_res, tmp) ||
         pic_q < 5 || pic_q > 90 ||
         vid_fps < 1 || vid_fps > 25 ||
-        vid_br == 0) {
+        vid_br == 0 || vid_br > 32) {
       result = 0x01; reason = 0x01;
     } else {
       rt.m5_pic_res.store(vid_res); // 图片分辨率同录像分辨率
@@ -2647,7 +2927,7 @@ inline void handle_set_media_1A_req(const btt::proto::Frame& fr, RuntimeConfig& 
       rt.m5_video_res.store(vid_res);
       rt.m5_video_fps.store(vid_fps);
       rt.m5_video_bitrate_unit.store(vid_br);
-      rt.video_bitrate_kbps.store(uint16_t(vid_br) * 32u);
+      rt.video_bitrate_kbps.store(bitrate_unit_to_kbps(vid_br));
 
       (void)m5_persist_save(rt);
 
@@ -2658,7 +2938,8 @@ inline void handle_set_media_1A_req(const btt::proto::Frame& fr, RuntimeConfig& 
       }
 
       LOGI("0x1A SET_MEDIA OK: pic_res=%u q=%u vid_res=%u fps=%u br_unit=%u(%ukbps)",
-           vid_res, pic_q, vid_res, vid_fps, vid_br, unsigned(vid_br) * 32u);
+           vid_res, pic_q, vid_res, vid_fps, vid_br,
+           unsigned(bitrate_unit_to_kbps(vid_br)));
     }
   }
 
@@ -2673,6 +2954,10 @@ static uint8_t hif_pic_to_code(int hif_pic)
     case HIF_PIC_1080P:   return 8;
     default:              return 3; // 或 0xFF 表示未知
   }
+}
+
+inline bool is_media_res_code_valid(uint8_t code) {
+  return code == 3 || code == 6 || code == 7 || code == 8;
 }
 
 static int     code_to_hif_pic(uint8_t code);  // 也需要 0x1A 用
@@ -2690,12 +2975,22 @@ void handle_get_media_1B_req(const btt::proto::Frame& fr,
   uint8_t result = 0x00;
   uint8_t reason = 0x00;
 
-  // 默认回退值（防止读取失败时全 0）
-  uint8_t pic_res_code = 3;   // 固定默认
-  uint8_t pic_quality  = 75;  // 默认 75
-  uint8_t vid_res_code = 3;   // 默认 720P
-  uint8_t vid_fps      = 25;  // 默认 25
-  uint8_t vid_br_unit  = 0xFF;// 默认未知/不支持时 FF，
+  // 优先回协议/runtime 配置，避免底层库字段语义和协议不一致
+  uint8_t pic_res_code = rt.m5_pic_res.load();
+  uint8_t pic_quality  = rt.m5_pic_quality.load();
+  uint8_t vid_res_code = rt.m5_video_res.load();
+  uint8_t vid_fps      = rt.m5_video_fps.load();
+  uint8_t vid_br_unit  = rt.m5_video_bitrate_unit.load();
+
+  if (!is_media_res_code_valid(pic_res_code)) {
+    pic_res_code = kFactoryMediaPicRes;
+  }
+  if (!is_media_res_code_valid(vid_res_code)) {
+    vid_res_code = kFactoryMediaVideoRes;
+  }
+  if (pic_quality < 5 || pic_quality > 90) pic_quality = kFactoryMediaPicQuality;
+  if (vid_fps == 0 || vid_fps > 25) vid_fps = kFactoryMediaVideoFps;
+  if (vid_br_unit == 0 || vid_br_unit > 32) vid_br_unit = kFactoryMediaVideoBitrateUnit;
 
   // 1) 从 HiF 读取参数
   hif_media_param_t mp;  
@@ -2706,29 +3001,15 @@ void handle_get_media_1B_req(const btt::proto::Frame& fr,
     result = 0x01;
     reason = 0x01;  // 读取失败原因码自定义
   } else {
-    // 2) 从 mp 映射到协议字段
-    // --- 图片分辨率：无效化图片分辨率
-    // pic_res_code = 3;
-
-  
-    pic_res_code = hif_pic_to_code(mp.pic_size);      // 
-    vid_res_code = hif_pic_to_code(mp.pic_size);    // 
-
-    // 图片质量：如果 HiF 有 quality 字段就用，没有就保留默认/返回 runtime
-    pic_quality  = rt.m5_pic_quality.load();                    
-
-    vid_fps      = static_cast<uint8_t>(mp.frame_rate);     
-    // 协议里 vid_br_unit 是 32K 的倍数单位：bitrateUnit(1B)
-    // mp.bitrate_kbps：单位 kbps
-    // bitrateUnit = (mp.bitrate_kbps * 1024) / (32*1024) = mp.bitrate_kbps / 32
-    if (mp.bit_rate > 0) {                      
-      vid_br_unit = static_cast<uint8_t>(mp.bit_rate / 32);
-    } else {
-      vid_br_unit = 0xFF;
+    // 分辨率优先用底层当前编码器状态，其余字段回 runtime 配置
+    const uint8_t hif_res_code = hif_pic_to_code(mp.pic_size);
+    if (hif_res_code == 3 || hif_res_code == 6 || hif_res_code == 7 || hif_res_code == 8) {
+      pic_res_code = hif_res_code;
+      vid_res_code = hif_res_code;
     }
   }
-  printf("get_media_1B:  vid_res=%u, fps=%d, bit_rate=%d \n",
-         mp.pic_size, mp.frame_rate, mp.bit_rate);
+  printf("get_media_1B: hif_res=%u hif_fps=%d hif_bit_rate=%d rt_fps=%u rt_br_unit=%u\n",
+         mp.pic_size, mp.frame_rate, mp.bit_rate, vid_fps, vid_br_unit);
 
   // 3) 组包 payload
 
@@ -4306,6 +4587,8 @@ inline void handle_m8_strategy_28_req(const btt::proto::Frame& fr, RuntimeConfig
 
 inline void handle_m8_strategy_29_req(const btt::proto::Frame& fr, RuntimeConfig& rt,
                                       btt::utils::BlockingQueue<btt::proto::Frame>& outbound) {
+  uint8_t result = 0x00;
+  uint8_t reason = 0x00;
   btt::proto::Frame resp;
   resp.cmd = 0x29;
   resp.level = 0x01;
@@ -4322,10 +4605,14 @@ inline void handle_m8_strategy_29_req(const btt::proto::Frame& fr, RuntimeConfig
       if (event_type == 0) std::memcpy(raw73, rt.m8_strategy_raw0.data(), 73);
       else                 std::memcpy(raw73, rt.m8_strategy_raw1.data(), 73);
     } else {
+      result = 0x01;
+      reason = 0x40; // 无效的事件类型
       raw73[0] = event_type;
       raw73[24] = 0; // N=0，最短回显
     }
   } else {
+    result = 0x01;
+    reason = 0x04; // 命令长度错误
     raw73[0] = 0xFF;
     raw73[24] = 0;
   }
@@ -4333,7 +4620,10 @@ inline void handle_m8_strategy_29_req(const btt::proto::Frame& fr, RuntimeConfig
   const uint8_t n = raw73[24];
   const uint8_t cnt = (n > 4) ? 4 : n;
   const size_t len = 25 + size_t(cnt) * 12;
-  resp.payload.assign(raw73, raw73 + len);
+  resp.payload.reserve(2 + len);
+  resp.payload.push_back(result);
+  resp.payload.push_back(reason);
+  resp.payload.insert(resp.payload.end(), raw73, raw73 + len);
   outbound.push(std::move(resp));
 }
 
@@ -4693,7 +4983,7 @@ inline void handle_m8_internal_timeout(const btt::proto::Frame& fr, RuntimeConfi
   deadline_ms.store(0);
 }
 
-// ----------------- 主运行：认证/心跳 + M2.1(0x20/0x21) + M3(0x30/0x39/0x3A) + M4(0x3D/0x3E/0x3F) + M5(0x11/0x12/0x1A/0x1B/0x38 + 0x5B) + M6(事件文件上传) + M7(0x35/0x36/0x37/0x51) + M8(0x1C/0x1D/0x28/0x29/0x41/0xA6/0x52/0x53) -----------------
+// ----------------- 主运行：认证/心跳 + 控制(0x16) + M2.1(0x20/0x21) + M3(0x30/0x39/0x3A) + M4(0x3D/0x3E/0x3F) + M5(0x11/0x12/0x1A/0x1B/0x38 + 0x5B) + M6(事件文件上传) + M7(0x35/0x36/0x37/0x51) + M8(0x1C/0x1D/0x28/0x29/0x41/0xA6/0x52/0x53) -----------------
 inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<bool>& stop_flag) {
   btt::net::TcpClient cli;
   btt::proto::StreamDecoder decoder;
@@ -4726,6 +5016,15 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   media.set_streamer(&streamer);
 
   std::atomic<bool> stop{false};
+  std::atomic<uint8_t> pending_control_action{
+      static_cast<uint8_t>(CoreControlAction::None)};
+  std::atomic<uint16_t> pending_control_seq{0};
+  std::mutex pending_net_mu;
+  PendingNetConfig pending_net_cfg;
+  std::atomic<bool> pending_net_active{false};
+  std::atomic<uint16_t> pending_net_seq{0};
+  std::atomic<uint8_t> final_control_action{
+      static_cast<uint8_t>(CoreControlAction::None)};
   UpgradedWatchdogClient watchdog_client;
   int64_t last_watchdog_tx_ms = 0;
   constexpr uint32_t kTimerWatchdogStepMs = 50;
@@ -4789,6 +5088,10 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   auto disconnect = [&](uint8_t reason){
     LOGW("DISCONNECT reason=%u", reason);
     cli.close_fd();
+    pending_control_action.store(static_cast<uint8_t>(CoreControlAction::None));
+    pending_control_seq.store(0);
+    pending_net_active.store(false);
+    pending_net_seq.store(0);
 
   // M6：停止上传线程
   uploader.stop_and_join();
@@ -4867,6 +5170,13 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
         continue;
       }
 
+      // 控制：0x16 重启 / 恢复出厂设置
+      if (fr.cmd == 0x16) {
+        handle_control_16_req(fr, def, rt, media, pending_control_action,
+                              pending_control_seq, outbound);
+        continue;
+      }
+
       // M8：0x1C/0x1D/0x28/0x29 + 0x41/0xA6 + 0x52/0x53 ACK
       if (fr.cmd == 0x1C) { handle_m8_trigger_1C_req(fr, rt, outbound); continue; }
       if (fr.cmd == 0x1D) { handle_m8_trigger_1D_req(fr, rt, outbound); continue; }
@@ -4878,7 +5188,12 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
       if (fr.cmd == 0x53) { handle_m8_event_53_resp(fr); continue; }
 
       // M5：0x11/0x12/0x1A/0x1B/0x38 + 0x5B ACK
-      if (fr.cmd == 0x11) { handle_set_netparam_11_req(fr, rt, outbound); continue; }
+      if (fr.cmd == 0x11) {
+        handle_set_netparam_11_req(fr, rt, pending_net_mu, pending_net_cfg,
+                                   pending_net_active, pending_net_seq,
+                                   outbound);
+        continue;
+      }
       if (fr.cmd == 0x12) { handle_get_netparam_12_req(fr, rt, outbound); continue; }
       if (fr.cmd == 0x1A) { handle_set_media_1A_req(fr, rt, media, outbound); continue; }
       if (fr.cmd == 0x1B) { handle_get_media_1B_req(fr, rt, outbound); continue; }
@@ -4933,7 +5248,29 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
         rt.wd_net_tx_ms.store(now_ms_steady());
         continue;
       }
-      if (!rt.connected.load()) continue;
+      const bool is_pending_control_ack =
+          opt->cmd == 0x16 &&
+          opt->level == 0x01 &&
+          pending_control_action.load() !=
+              static_cast<uint8_t>(CoreControlAction::None) &&
+          opt->seq == pending_control_seq.load();
+      const bool is_pending_net_ack =
+          opt->cmd == 0x11 &&
+          opt->level == 0x01 &&
+          pending_net_active.load() &&
+          opt->seq == pending_net_seq.load();
+      if (!rt.connected.load()) {
+        if (is_pending_control_ack) {
+          pending_control_action.store(
+              static_cast<uint8_t>(CoreControlAction::None));
+          pending_control_seq.store(0);
+        }
+        if (is_pending_net_ack) {
+          pending_net_active.store(false);
+          pending_net_seq.store(0);
+        }
+        continue;
+      }
 
       // 编码前打印
       log_frame_brief("TX", *opt);
@@ -4948,6 +5285,31 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
         disconnect(16);
       } else {
         rt.wd_net_tx_ms.store(now_ms_steady());
+        if (is_pending_net_ack) {
+          PendingNetConfig staged{};
+          {
+            std::lock_guard<std::mutex> lk(pending_net_mu);
+            staged = pending_net_cfg;
+          }
+          pending_net_active.store(false);
+          pending_net_seq.store(0);
+          commit_pending_net_config_after_ack(staged, rt);
+        }
+        if (is_pending_control_ack) {
+          const uint8_t action =
+              pending_control_action.exchange(
+                  static_cast<uint8_t>(CoreControlAction::None));
+          pending_control_seq.store(0);
+          if (action != static_cast<uint8_t>(CoreControlAction::None)) {
+            final_control_action.store(action);
+            disconnect(action == static_cast<uint8_t>(CoreControlAction::RebootDevice)
+                           ? 22
+                           : 23);
+            stop.store(true);
+            inbound.notify_all();
+            outbound.notify_all();
+          }
+        }
       }
     }
   });
@@ -5200,6 +5562,13 @@ inline int run_core(const DefaultConfig& def, RuntimeConfig& rt, std::atomic<boo
   if (t_tx.joinable()) t_tx.join();
   if (t_measure.joinable()) t_measure.join();
 
+  const uint8_t action = final_control_action.load();
+  if (action == static_cast<uint8_t>(CoreControlAction::RestartProgram)) {
+    return kRunCoreExitRestartProgram;
+  }
+  if (action == static_cast<uint8_t>(CoreControlAction::RebootDevice)) {
+    return kRunCoreExitRebootDevice;
+  }
   return 0;
 }
 

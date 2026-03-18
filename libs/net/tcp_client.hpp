@@ -59,10 +59,10 @@ class TcpClient {
     if (fd_ < 0) return false;
     size_t off = 0;
     while (off < n) {
-      ssize_t s = ::send(fd_, buf + off, n - off, 0);
+      ssize_t s = ::send(fd_, buf + off, n - off, MSG_NOSIGNAL);
       if (s > 0) { off += size_t(s); continue; }
       if (errno == EINTR) continue;
-      if (errno == EAGAIN || errno == EWOULDBLOCK) continue;
+      if (errno == EAGAIN || errno == EWOULDBLOCK) return false;
       return false;
     }
     return true;
