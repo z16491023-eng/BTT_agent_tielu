@@ -3690,6 +3690,7 @@ inline btt::proto::Frame make_measure_event_5B_req(RuntimeConfig& rt,
   f.payload.insert(f.payload.end(), t8, t8 + 8);
 
   append_u32_be(f.payload, 0xFFFFFFFFu); // 温湿度默认
+  f.payload.push_back(0x03); // 位置信息，不确定，先写死 3=测量事件位置
   append_u16_be(f.payload, 0xFFFF);
   append_u16_be(f.payload, 0xFFFF);
   append_u16_be(f.payload, 0xFFFF);
@@ -6478,6 +6479,7 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
 
   // M5：周期测量线程（0x38 mode=0 配置后生效；整点对齐）
   std::thread t_measure([&]{
+    std::time_t last_periodic_slot_t = 0;
     while (!stop.load()) {
       if (stop_flag.load()) break;
 
@@ -6497,20 +6499,26 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
       std::tm tm{};
       ::localtime_r(&now_t, &tm);
 
-      int cur_min = tm.tm_min;
-      int cur_sec = tm.tm_sec;
-      int next_min = 0;
-      if ((cur_min % interval) == 0 && cur_sec == 0) {
-        next_min = cur_min; // 已在边界，立即触发
-      } else {
-        next_min = ((cur_min / interval) + 1) * interval;
-        if (next_min >= 60) { next_min = 0; tm.tm_hour += 1; }
-      }
+      const int cur_min = tm.tm_min;
+      const int cur_sec = tm.tm_sec;
+      const bool at_boundary = ((cur_min % interval) == 0 && cur_sec == 0);
 
-      tm.tm_min = next_min;
-      tm.tm_sec = 0;
-      std::time_t next_t = ::mktime(&tm);
-      if (next_t <= now_t) next_t = now_t + 1;
+      std::tm slot_tm = tm;
+      slot_tm.tm_min = (cur_min / interval) * interval;
+      slot_tm.tm_sec = 0;
+      const std::time_t cur_slot_t = ::mktime(&slot_tm);
+
+      std::time_t next_t = 0;
+      if (at_boundary && cur_slot_t > last_periodic_slot_t) {
+        next_t = cur_slot_t; // 当前槽位尚未执行，立即触发
+      } else {
+        int next_min = ((cur_min / interval) + 1) * interval;
+        if (next_min >= 60) { next_min = 0; tm.tm_hour += 1; }
+        tm.tm_min = next_min;
+        tm.tm_sec = 0;
+        next_t = ::mktime(&tm);
+        if (next_t <= now_t) next_t = now_t + 1;
+      }
 
       // 睡眠直到 next_t（分段睡，便于 stop/配置变更）
       while (!stop.load()) {
@@ -6521,6 +6529,9 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
       }
       if (stop.load() || stop_flag.load() || !rt.m5_measure_periodic.load()) continue;
+
+      if (next_t <= last_periodic_slot_t) continue;
+      last_periodic_slot_t = next_t;
 
       // 触发一次周期测量
       const bool connected = rt.connected.load() && rt.authed.load();
