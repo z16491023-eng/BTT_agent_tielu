@@ -144,6 +144,105 @@ upgraded/fast:
 	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/build
 .PHONY : upgraded/fast
 
+__/libs/core/core_app.o: __/libs/core/core_app.cpp.o
+.PHONY : __/libs/core/core_app.o
+
+# target to build an object file
+__/libs/core/core_app.cpp.o:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o
+.PHONY : __/libs/core/core_app.cpp.o
+
+__/libs/core/core_app.i: __/libs/core/core_app.cpp.i
+.PHONY : __/libs/core/core_app.i
+
+# target to preprocess a source file
+__/libs/core/core_app.cpp.i:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.i
+.PHONY : __/libs/core/core_app.cpp.i
+
+__/libs/core/core_app.s: __/libs/core/core_app.cpp.s
+.PHONY : __/libs/core/core_app.s
+
+# target to generate assembly for a file
+__/libs/core/core_app.cpp.s:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.s
+.PHONY : __/libs/core/core_app.cpp.s
+
+__/libs/net/tcp_client.o: __/libs/net/tcp_client.cpp.o
+.PHONY : __/libs/net/tcp_client.o
+
+# target to build an object file
+__/libs/net/tcp_client.cpp.o:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o
+.PHONY : __/libs/net/tcp_client.cpp.o
+
+__/libs/net/tcp_client.i: __/libs/net/tcp_client.cpp.i
+.PHONY : __/libs/net/tcp_client.i
+
+# target to preprocess a source file
+__/libs/net/tcp_client.cpp.i:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.i
+.PHONY : __/libs/net/tcp_client.cpp.i
+
+__/libs/net/tcp_client.s: __/libs/net/tcp_client.cpp.s
+.PHONY : __/libs/net/tcp_client.s
+
+# target to generate assembly for a file
+__/libs/net/tcp_client.cpp.s:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.s
+.PHONY : __/libs/net/tcp_client.cpp.s
+
+__/libs/proto/btt_proto.o: __/libs/proto/btt_proto.cpp.o
+.PHONY : __/libs/proto/btt_proto.o
+
+# target to build an object file
+__/libs/proto/btt_proto.cpp.o:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o
+.PHONY : __/libs/proto/btt_proto.cpp.o
+
+__/libs/proto/btt_proto.i: __/libs/proto/btt_proto.cpp.i
+.PHONY : __/libs/proto/btt_proto.i
+
+# target to preprocess a source file
+__/libs/proto/btt_proto.cpp.i:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.i
+.PHONY : __/libs/proto/btt_proto.cpp.i
+
+__/libs/proto/btt_proto.s: __/libs/proto/btt_proto.cpp.s
+.PHONY : __/libs/proto/btt_proto.s
+
+# target to generate assembly for a file
+__/libs/proto/btt_proto.cpp.s:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.s
+.PHONY : __/libs/proto/btt_proto.cpp.s
+
+__/libs/utils/log.o: __/libs/utils/log.cpp.o
+.PHONY : __/libs/utils/log.o
+
+# target to build an object file
+__/libs/utils/log.cpp.o:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.o
+.PHONY : __/libs/utils/log.cpp.o
+
+__/libs/utils/log.i: __/libs/utils/log.cpp.i
+.PHONY : __/libs/utils/log.i
+
+# target to preprocess a source file
+__/libs/utils/log.cpp.i:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.i
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.i
+.PHONY : __/libs/utils/log.cpp.i
+
+__/libs/utils/log.s: __/libs/utils/log.cpp.s
+.PHONY : __/libs/utils/log.s
+
+# target to generate assembly for a file
+__/libs/utils/log.cpp.s:
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/btt_core.dir/build.make apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.s
+	cd /home/li/hi_project/Btt-agent/build-arm && $(MAKE) $(MAKESILENT) -f apps/CMakeFiles/upgraded.dir/build.make apps/CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.s
+.PHONY : __/libs/utils/log.cpp.s
+
 btt-core/main.o: btt-core/main.cpp.o
 .PHONY : btt-core/main.o
 
@@ -226,6 +325,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... btt_core"
 	@echo "... upgraded"
+	@echo "... __/libs/core/core_app.o"
+	@echo "... __/libs/core/core_app.i"
+	@echo "... __/libs/core/core_app.s"
+	@echo "... __/libs/net/tcp_client.o"
+	@echo "... __/libs/net/tcp_client.i"
+	@echo "... __/libs/net/tcp_client.s"
+	@echo "... __/libs/proto/btt_proto.o"
+	@echo "... __/libs/proto/btt_proto.i"
+	@echo "... __/libs/proto/btt_proto.s"
+	@echo "... __/libs/utils/log.o"
+	@echo "... __/libs/utils/log.i"
+	@echo "... __/libs/utils/log.s"
 	@echo "... btt-core/main.o"
 	@echo "... btt-core/main.i"
 	@echo "... btt-core/main.s"

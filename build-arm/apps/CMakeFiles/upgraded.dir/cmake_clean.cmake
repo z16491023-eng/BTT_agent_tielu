@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "../bin/upgraded"
   "../bin/upgraded.pdb"
+  "CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.o"
+  "CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.o.d"
   "CMakeFiles/upgraded.dir/upgraded/main.cpp.o"
   "CMakeFiles/upgraded.dir/upgraded/main.cpp.o.d"
   "CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.o"

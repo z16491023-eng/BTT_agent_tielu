@@ -83,14 +83,78 @@ apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/btt_core.dir/btt-core/main.cpp.s"
 	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/li/hi_project/Btt-agent/apps/btt-core/main.cpp -o CMakeFiles/btt_core.dir/btt-core/main.cpp.s
 
+apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o: apps/CMakeFiles/btt_core.dir/flags.make
+apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o: /home/li/hi_project/Btt-agent/libs/core/core_app.cpp
+apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o: apps/CMakeFiles/btt_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/li/hi_project/Btt-agent/build-arm/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o -MF CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o.d -o CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o -c /home/li/hi_project/Btt-agent/libs/core/core_app.cpp
+
+apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.i"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/li/hi_project/Btt-agent/libs/core/core_app.cpp > CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.i
+
+apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.s"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/li/hi_project/Btt-agent/libs/core/core_app.cpp -o CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.s
+
+apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o: apps/CMakeFiles/btt_core.dir/flags.make
+apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o: /home/li/hi_project/Btt-agent/libs/net/tcp_client.cpp
+apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o: apps/CMakeFiles/btt_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/li/hi_project/Btt-agent/build-arm/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o -MF CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o.d -o CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o -c /home/li/hi_project/Btt-agent/libs/net/tcp_client.cpp
+
+apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.i"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/li/hi_project/Btt-agent/libs/net/tcp_client.cpp > CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.i
+
+apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.s"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/li/hi_project/Btt-agent/libs/net/tcp_client.cpp -o CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.s
+
+apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o: apps/CMakeFiles/btt_core.dir/flags.make
+apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o: /home/li/hi_project/Btt-agent/libs/proto/btt_proto.cpp
+apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o: apps/CMakeFiles/btt_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/li/hi_project/Btt-agent/build-arm/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o -MF CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o.d -o CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o -c /home/li/hi_project/Btt-agent/libs/proto/btt_proto.cpp
+
+apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.i"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/li/hi_project/Btt-agent/libs/proto/btt_proto.cpp > CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.i
+
+apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.s"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/li/hi_project/Btt-agent/libs/proto/btt_proto.cpp -o CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.s
+
+apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o: apps/CMakeFiles/btt_core.dir/flags.make
+apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o: /home/li/hi_project/Btt-agent/libs/utils/log.cpp
+apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o: apps/CMakeFiles/btt_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/li/hi_project/Btt-agent/build-arm/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o -MF CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o.d -o CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o -c /home/li/hi_project/Btt-agent/libs/utils/log.cpp
+
+apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.i"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/li/hi_project/Btt-agent/libs/utils/log.cpp > CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.i
+
+apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.s"
+	cd /home/li/hi_project/Btt-agent/build-arm/apps && /opt/linux/x86-arm/arm-mix410-linux/bin/arm-mix410-linux-g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/li/hi_project/Btt-agent/libs/utils/log.cpp -o CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.s
+
 # Object files for target btt_core
 btt_core_OBJECTS = \
-"CMakeFiles/btt_core.dir/btt-core/main.cpp.o"
+"CMakeFiles/btt_core.dir/btt-core/main.cpp.o" \
+"CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o" \
+"CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o" \
+"CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o" \
+"CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o"
 
 # External object files for target btt_core
 btt_core_EXTERNAL_OBJECTS =
 
 bin/btt_core: apps/CMakeFiles/btt_core.dir/btt-core/main.cpp.o
+bin/btt_core: apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o
+bin/btt_core: apps/CMakeFiles/btt_core.dir/__/libs/net/tcp_client.cpp.o
+bin/btt_core: apps/CMakeFiles/btt_core.dir/__/libs/proto/btt_proto.cpp.o
+bin/btt_core: apps/CMakeFiles/btt_core.dir/__/libs/utils/log.cpp.o
 bin/btt_core: apps/CMakeFiles/btt_core.dir/build.make
 bin/btt_core: /home/li/hi_project/Btt-agent/external/lib/libhsdk_media_3520.a
 bin/btt_core: /home/li/hi_project/Btt-agent/external/lib/libss_mpi.a
@@ -103,7 +167,7 @@ bin/btt_core: /home/li/hi_project/Btt-agent/external/lib/libss_ive.a
 bin/btt_core: /home/li/hi_project/Btt-agent/external/lib/libss_hdmi.a
 bin/btt_core: /home/li/hi_project/Btt-agent/external/lib/libhgs_misc.a
 bin/btt_core: apps/CMakeFiles/btt_core.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/li/hi_project/Btt-agent/build-arm/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../bin/btt_core"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/li/hi_project/Btt-agent/build-arm/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable ../bin/btt_core"
 	cd /home/li/hi_project/Btt-agent/build-arm/apps && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/btt_core.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

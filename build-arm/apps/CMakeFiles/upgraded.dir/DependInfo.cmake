@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/li/hi_project/Btt-agent/libs/utils/log.cpp" "apps/CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.o" "gcc" "apps/CMakeFiles/upgraded.dir/__/libs/utils/log.cpp.o.d"
   "/home/li/hi_project/Btt-agent/apps/upgraded/main.cpp" "apps/CMakeFiles/upgraded.dir/upgraded/main.cpp.o" "gcc" "apps/CMakeFiles/upgraded.dir/upgraded/main.cpp.o.d"
   "/home/li/hi_project/Btt-agent/apps/upgraded/upgraded.cpp" "apps/CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.o" "gcc" "apps/CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.o.d"
   )

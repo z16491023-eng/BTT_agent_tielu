@@ -1,11 +1,16 @@
 
 add_executable(btt_core
   btt-core/main.cpp
+  ${CMAKE_SOURCE_DIR}/libs/core/core_app.cpp
+  ${CMAKE_SOURCE_DIR}/libs/net/tcp_client.cpp
+  ${CMAKE_SOURCE_DIR}/libs/proto/btt_proto.cpp
+  ${CMAKE_SOURCE_DIR}/libs/utils/log.cpp
 )
 
 add_executable(upgraded
   upgraded/main.cpp
   upgraded/upgraded.cpp
+  ${CMAKE_SOURCE_DIR}/libs/utils/log.cpp
 )
 
 # 关键：让 #include "libs/xxx/yyy.hpp" 能找到
