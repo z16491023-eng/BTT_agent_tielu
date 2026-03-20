@@ -67,6 +67,12 @@ class TcpClient {
   int fd() const { return fd_; }
 
   /**
+   * @brief 获取最近一次套接字操作失败时记录的错误码。
+   * @return 返回最近一次失败的 `errno`/`SO_ERROR`；若尚无失败则返回 0。
+   */
+  int last_error() const { return last_error_; }
+
+  /**
    * @brief 关闭当前底层套接字。
    */
   void close_fd();
@@ -80,6 +86,7 @@ class TcpClient {
   void finalize_socket();
 
   int fd_{-1};
+  int last_error_{0};
 };
 
 }  // namespace btt::net

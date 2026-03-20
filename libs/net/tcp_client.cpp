@@ -36,8 +36,12 @@ TcpClient::~TcpClient() { close_fd(); }
  */
 bool TcpClient::connect_to(const std::string& ip, uint16_t port, int timeout_ms) {
   close_fd();
+  last_error_ = 0;
   fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
-  if (fd_ < 0) return false;
+  if (fd_ < 0) {
+    last_error_ = errno;
+    return false;
+  }
 
   const int flags = ::fcntl(fd_, F_GETFL, 0);
   (void)::fcntl(fd_, F_SETFL, flags | O_NONBLOCK);
@@ -46,7 +50,9 @@ bool TcpClient::connect_to(const std::string& ip, uint16_t port, int timeout_ms)
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
   if (::inet_pton(AF_INET, ip.c_str(), &addr.sin_addr) != 1) {
+    last_error_ = EINVAL;
     close_fd();
+    errno = last_error_;
     return false;
   }
 
@@ -56,7 +62,9 @@ bool TcpClient::connect_to(const std::string& ip, uint16_t port, int timeout_ms)
     return true;
   }
   if (errno != EINPROGRESS) {
+    last_error_ = errno;
     close_fd();
+    errno = last_error_;
     return false;
   }
 
@@ -70,7 +78,9 @@ bool TcpClient::connect_to(const std::string& ip, uint16_t port, int timeout_ms)
 
   rc = ::select(fd_ + 1, nullptr, &write_fds, nullptr, &tv);
   if (rc <= 0) {
+    last_error_ = (rc == 0) ? ETIMEDOUT : errno;
     close_fd();
+    errno = last_error_;
     return false;
   }
 
@@ -78,7 +88,9 @@ bool TcpClient::connect_to(const std::string& ip, uint16_t port, int timeout_ms)
   socklen_t len = sizeof(err);
   ::getsockopt(fd_, SOL_SOCKET, SO_ERROR, &err, &len);
   if (err != 0) {
+    last_error_ = err;
     close_fd();
+    errno = last_error_;
     return false;
   }
 
@@ -93,8 +105,14 @@ bool TcpClient::connect_to(const std::string& ip, uint16_t port, int timeout_ms)
  * @return 返回 `recv()` 的原始结果；若当前未连接则返回 `-1`。
  */
 ssize_t TcpClient::recv_some(uint8_t* buf, size_t n) {
-  if (fd_ < 0) return -1;
-  return ::recv(fd_, buf, n, 0);
+  if (fd_ < 0) {
+    last_error_ = ENOTCONN;
+    errno = last_error_;
+    return -1;
+  }
+  const ssize_t rc = ::recv(fd_, buf, n, 0);
+  if (rc < 0) last_error_ = errno;
+  return rc;
 }
 
 /**
@@ -104,7 +122,11 @@ ssize_t TcpClient::recv_some(uint8_t* buf, size_t n) {
  * @return `true` 表示本次调用已发送完全部数据，`false` 表示发送失败或未能一次性完成。
  */
 bool TcpClient::send_all(const uint8_t* buf, size_t n) {
-  if (fd_ < 0) return false;
+  if (fd_ < 0) {
+    last_error_ = ENOTCONN;
+    errno = last_error_;
+    return false;
+  }
   size_t off = 0;
   while (off < n) {
     const ssize_t sent = ::send(fd_, buf + off, n - off, MSG_NOSIGNAL);
@@ -113,6 +135,7 @@ bool TcpClient::send_all(const uint8_t* buf, size_t n) {
       continue;
     }
     if (errno == EINTR) continue;
+    last_error_ = errno;
     if (errno == EAGAIN || errno == EWOULDBLOCK) return false;
     return false;
   }

@@ -88,6 +88,36 @@ inline uint32_t age_ms_from(int64_t now_ms, int64_t last_ms) {
       (delta > static_cast<int64_t>(UINT32_MAX)) ? UINT32_MAX : delta);
 }
 
+/**
+ * @brief 判断套接字错误码是否更接近“网络掉线/不可达”。
+ * @param err 套接字错误码。
+ * @return `true` 表示应归类为重连原因 `13`，否则返回 `false`。
+ */
+inline bool is_network_drop_errno(int err) {
+  switch (err) {
+    case ENETDOWN:
+    case ENETUNREACH:
+    case ENONET:
+    case EHOSTDOWN:
+    case EHOSTUNREACH:
+      return true;
+    default:
+      return false;
+  }
+}
+
+/**
+ * @brief 将套接字错误码映射为认证重连原因。
+ * @param err 套接字错误码。
+ * @return 返回协议中的重连原因码。
+ */
+inline uint8_t reconnect_reason_from_socket_error(int err) {
+  if (is_network_drop_errno(err)) return 13;
+  if (err == ECONNRESET) return 15;
+  if (err == EPIPE) return 14;
+  return 16;
+}
+
 class UpgradedWatchdogClient {
  public:
   /**
@@ -3272,7 +3302,7 @@ inline void commit_pending_net_config_after_ack(const PendingNetConfig& cfg,
   }
 
   if (cfg.need_disconnect) {
-    rt.force_disconnect_reason.store(21);
+    rt.force_disconnect_reason.store(18);
     rt.force_disconnect.store(true);
   }
 
@@ -4289,11 +4319,10 @@ inline void handle_event_clear_3F_req(const btt::proto::Frame& fr,
 // 兼容模式：
 // - 目录ID：tar 打包上传（旧流程）
 // - 文件ID：原文件直传（新流程）
-// 成功结束条件：发送最后一个 0x50(flag=2) -> 等待媒体通道返回 0x50 ACK(payload=2B) -> 关闭媒体 socket
+// 成功结束条件：发送最后一个 0x50(flag=2) -> 关闭媒体 socket
 
 static constexpr size_t kEventUploadChunkBytes = 1024;   // 1KB
 static constexpr int    kEventUploadMaxSeconds = 60;     // >60s 视为超时，发送 0x32
-static constexpr int    kEventUploadAckTimeoutMs = 10000; // 等待最后 ACK 超时
 
 
 /**
@@ -4554,70 +4583,6 @@ inline void cleanup_event_tmp_tar(uint32_t event_id) {
   (void)unlink_noerr(tar);
 }
 
-// 最后一包(flag=2)之后等待 0x50 ACK（payload=2B：result, reason）
-/**
- * @brief 等待 `wait_media_0x50_ack` 对应条件。
- * @param cli TCP 客户端。
- * @param dec 协议解码器。
- * @param stop_flag 停止标志。
- * @param timeout_ms 超时时间，单位毫秒。
- * @param out_result 输出参数。
- * @param out_reason 输出参数。
- * @return `true` 表示成功或条件成立，`false` 表示失败或条件不成立。
- */
-inline bool wait_media_0x50_ack(btt::net::TcpClient& cli, btt::proto::StreamDecoder& dec,
-                               std::atomic<bool>& stop_flag, int timeout_ms,
-                               uint8_t& out_result, uint8_t& out_reason) {
-  out_result = 0x01;
-  out_reason = 0x01;
-
-  const int64_t t0 = now_ms_steady();
-  uint8_t buf[2048];
-
-  while (!stop_flag.load()) {
-    const int64_t now = now_ms_steady();
-    if (now - t0 > timeout_ms) return false;
-
-    // select 等待可读
-    fd_set rfds;
-    FD_ZERO(&rfds);
-    FD_SET(cli.fd(), &rfds);
-
-    timeval tv{};
-    const int remain = timeout_ms - int(now - t0);
-    tv.tv_sec = remain / 1000;
-    tv.tv_usec = (remain % 1000) * 1000;
-
-    int rc = ::select(cli.fd() + 1, &rfds, nullptr, nullptr, &tv);
-    if (rc < 0) {
-      if (errno == EINTR) continue;
-      return false;
-    }
-    if (rc == 0) continue;
-
-    ssize_t n = cli.recv_some(buf, sizeof(buf));
-    if (n <= 0) return false;
-
-    // 兼容部分上位机实现：ACK 可能只回 2 字节(result, reason)，不带协议头
-    if (n == 2 && !(buf[0] == btt::proto::kHead0 && buf[1] == btt::proto::kHead1)) {
-      out_result = buf[0];
-      out_reason = buf[1];
-      return out_result == 0x00;
-    }
-
-    auto frames = dec.push(buf, (size_t)n);
-    for (auto& fr : frames) {
-      if (fr.cmd != 0x50) continue;
-      if (fr.level != 0x01) continue;
-      if (fr.payload.size() < 2) continue;
-      out_result = fr.payload[0];
-      out_reason = fr.payload[1];
-      return out_result == 0x00;
-    }
-  }
-  return false;
-}
-
 /**
  * @brief 构造 `make_event_upload_32` 对应结果。
  * @param key_id 上传键值 ID。
@@ -4751,7 +4716,7 @@ public:
     cancel_reason_.store(2); // 上位机终止
     cancel_.store(true);
     const int fd = media_fd_.load();
-    if (fd >= 0) ::shutdown(fd, SHUT_RDWR); // 让 send/ACK wait 尽快退出
+    if (fd >= 0) ::shutdown(fd, SHUT_RDWR); // 让发送尽快退出
     return true;
   }
 
@@ -4900,15 +4865,12 @@ private:
       return;
     }
 
-    btt::proto::StreamDecoder ack_dec;
     uint16_t stream_seq = (uint16_t)(r.offset / kEventUploadChunkBytes);
     uint16_t frame_seq = 1;
 
     uint64_t pos = r.offset;
     bool first = true;
     bool ok = false;
-    uint8_t final_ack_result = 0xFF;
-    uint8_t final_ack_reason = 0xFF;
 
     std::vector<uint8_t> chunk;
     chunk.resize(kEventUploadChunkBytes);
@@ -4956,26 +4918,22 @@ private:
 
         auto bytes = btt::proto::encode(f);
         if (bytes.empty() || !media.send_all(bytes.data(), bytes.size())) {
+          LOGW("M6 upload: send final empty 0x50 failed at seq=%u", stream_seq);
           end_reason = cancel_.load() ? (cancel_reason_.load() ? cancel_reason_.load() : 2) : 3;
           break;
         }
 
-        uint8_t ack_r=0, ack_rs=0;
-        if (wait_media_0x50_ack(media, ack_dec, stop_flag, kEventUploadAckTimeoutMs, ack_r, ack_rs)) {
-          ok = true; end_reason = 0;
-          final_ack_result = ack_r;
-          final_ack_reason = ack_rs;
-        } else {
-          end_reason = cancel_.load() ? (cancel_reason_.load() ? cancel_reason_.load() : 2) : 3;
-          final_ack_result = ack_r;
-          final_ack_reason = ack_rs;
-        }
+        LOGI("M6 upload: final 0x50 sent key=%08X req_id=%08X seq=%u flag=2 bytes=0",
+             r.key_id, r.event_id, stream_seq);
+        ok = true;
+        end_reason = 0;
         break;
       }
 
       pos += (uint64_t)n;
       sent_bytes_.store(pos - r.offset);
       const bool is_last = (pos >= total);
+      const uint16_t tx_stream_seq = stream_seq;
 
       uint8_t flag = 1;
       if (is_last) flag = 2;
@@ -5006,18 +4964,10 @@ private:
       stream_seq++;
 
       if (is_last) {
-        uint8_t ack_r=0, ack_rs=0;
-        if (wait_media_0x50_ack(media, ack_dec, stop_flag, kEventUploadAckTimeoutMs, ack_r, ack_rs)) {
-          ok = true;
-          end_reason = 0;
-          final_ack_result = ack_r;
-          final_ack_reason = ack_rs;
-        } else {
-          LOGW("M6 upload: wait ACK failed");
-          end_reason = cancel_.load() ? (cancel_reason_.load() ? cancel_reason_.load() : 2) : 3;
-          final_ack_result = ack_r;
-          final_ack_reason = ack_rs;
-        }
+        LOGI("M6 upload: final 0x50 sent key=%08X req_id=%08X seq=%u flag=2 bytes=%zd",
+             r.key_id, r.event_id, tx_stream_seq, n);
+        ok = true;
+        end_reason = 0;
         break;
       }
     }
@@ -5031,13 +4981,14 @@ private:
       cleanup_event_tmp_tar(r.owner_event_id);
     }
 
-    // 通知上位机结束（0x32）
     const int64_t cost_ms = now_ms_steady() - t0;
-    LOGI("M6 upload: finish key=%08X req_id=%08X kind=%s end_reason=0x%02X ok=%u sent=%llu/%llu cost_ms=%lld ack=(0x%02X,0x%02X)",
+    LOGI("M6 upload: finish key=%08X req_id=%08X kind=%s end_reason=0x%02X ok=%u sent=%llu/%llu cost_ms=%lld",
          r.key_id, r.event_id, event_upload_kind_name(r.kind), end_reason, ok ? 1 : 0,
          (unsigned long long)sent_bytes_.load(), (unsigned long long)total_bytes_.load(),
-         (long long)cost_ms, final_ack_result, final_ack_reason);
-    ctrl_out.push(make_event_upload_32(r.key_id, r.event_id, end_reason, rt));
+         (long long)cost_ms);
+    if (!ok || end_reason != 0) {
+      ctrl_out.push(make_event_upload_32(r.key_id, r.event_id, end_reason, rt));
+    }
     finish();
   }
 
@@ -6174,8 +6125,8 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
         rt.wd_net_rx_ms.store(now_ms_steady());
         continue;
       }
-      if (errno == ECONNRESET) disconnect(15);
-      else disconnect(16);
+      const int saved_errno = cli.last_error() ? cli.last_error() : errno;
+      disconnect(reconnect_reason_from_socket_error(saved_errno));
     }
   });
 
@@ -6329,7 +6280,8 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
       log_hex("TX RAW", bytes.data(), bytes.size());
 
       if (!cli.send_all(bytes.data(), bytes.size())) {
-        disconnect(16);
+        const int saved_errno = cli.last_error() ? cli.last_error() : errno;
+        disconnect(reconnect_reason_from_socket_error(saved_errno));
       } else {
         rt.wd_net_tx_ms.store(now_ms_steady());
         if (is_pending_net_ack) {
@@ -6349,9 +6301,7 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
           pending_control_seq.store(0);
           if (action != static_cast<uint8_t>(CoreControlAction::None)) {
             final_control_action.store(action);
-            disconnect(action == static_cast<uint8_t>(CoreControlAction::RebootDevice)
-                           ? 22
-                           : 23);
+            disconnect(5);
             stop.store(true);
             inbound.notify_all();
             outbound.notify_all();
@@ -6424,7 +6374,11 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
           rt.last_auth_tx_ms.store(now_ms_steady());
           outbound.push(std::move(auth));
         } else {
-          LOGW("CONNECT FAIL, sleep %us", ri);
+          const int saved_errno = cli.last_error();
+          if (is_network_drop_errno(saved_errno)) {
+            rt.reconnect_reason.store(13);
+          }
+          LOGW("CONNECT FAIL errno=%d sleep %us", saved_errno, ri);
           if (!timer_wait_watchdog_friendly(static_cast<uint32_t>(ri) * 1000u)) {
             break;
           }
