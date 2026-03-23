@@ -320,4 +320,5 @@ apps/CMakeFiles/btt_core.dir/__/libs/core/core_app.cpp.o: \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/bits/enable_special_members.h \
  /home/li/hi_project/Btt-agent/libs/proto/btt_proto.hpp \
  /home/li/hi_project/Btt-agent/libs/net/tcp_client.hpp \
+ /home/li/hi_project/Btt-agent/include/upgraded/upgrade_control_protocol.h \
  /home/li/hi_project/Btt-agent/include/upgraded/watchdog_protocol.h

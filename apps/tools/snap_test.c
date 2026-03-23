@@ -31,8 +31,13 @@ int main(void) {
     (void)HiF_media_get_param(ch, &p);   // 取默认值
 
     // 只配置通道0，且不注册回调（不录像、不取码流线程）
-    p.pic_size   = HIF_PIC_D1_NTSC;                
+    p.pic_size   = HIF_PIC_D1_NTSC;
     p.payload    = VE_TYPE_H264;
+    p.frame_rate = 25;
+    p.rc_mode    = VENC_RC_CBR;
+    p.bit_rate   = 550;
+    p.max_bit_rate = 2 * 1024;
+    p.long_term_min_bit_rate = 1 * 1024;
    
 
     if (HiF_media_set_param(ch, &p) != 0) {

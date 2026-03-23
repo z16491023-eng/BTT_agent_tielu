@@ -60,6 +60,7 @@ extern "C" {
 #include "libs/utils/blocking_queue.hpp"
 #include "libs/proto/btt_proto.hpp"
 #include "libs/net/tcp_client.hpp"
+#include "upgraded/upgrade_control_protocol.h"
 #include "upgraded/watchdog_protocol.h"
 
 namespace btt::core {
@@ -182,6 +183,383 @@ class UpgradedWatchdogClient {
   }
 
   int fd_ = -1;
+};
+
+class UpgradedControlClient {
+ public:
+  /**
+   * @brief 请求守护进程提交已接收完成的升级包。
+   * @param pid 当前 `btt-core` 进程号。
+   * @param pkg_size 应用侧写入 `pkg.part` 的总字节数。
+   * @param response 成功收到合法应答时写回应答内容。
+   * @return `true` 表示收到了合法应答；`false` 表示本地 IPC 失败。
+   */
+  bool CommitPackage(uint32_t pid, uint32_t pkg_size,
+                     upgraded::UpgradeCtlResponseV1* response) {
+    upgraded::UpgradeCtlRequestV1 request{};
+    upgraded::InitUpgradeCtlRequest(&request,
+                                    upgraded::kUpgradeCtlCommandCommitPackage);
+    request.pid = pid;
+    request.value0 = pkg_size;
+    return RoundTrip(request, response);
+  }
+
+  /**
+   * @brief 查询守护进程侧是否存在待上报的升级结果。
+   * @param pid 当前 `btt-core` 进程号。
+   * @param response 成功收到合法应答时写回应答内容。
+   * @return `true` 表示收到了合法应答；`false` 表示本地 IPC 失败。
+   */
+  bool QueryReport(uint32_t pid, upgraded::UpgradeCtlResponseV1* response) {
+    upgraded::UpgradeCtlRequestV1 request{};
+    upgraded::InitUpgradeCtlRequest(&request,
+                                    upgraded::kUpgradeCtlCommandQueryReport);
+    request.pid = pid;
+    return RoundTrip(request, response);
+  }
+
+  /**
+   * @brief 在 `0x58` 获得上位机 ACK 后清除守护进程侧的待上报结果。
+   * @param pid 当前 `btt-core` 进程号。
+   * @param response 成功收到合法应答时写回应答内容。
+   * @return `true` 表示收到了合法应答；`false` 表示本地 IPC 失败。
+   */
+  bool ClearReport(uint32_t pid, upgraded::UpgradeCtlResponseV1* response) {
+    upgraded::UpgradeCtlRequestV1 request{};
+    upgraded::InitUpgradeCtlRequest(&request,
+                                    upgraded::kUpgradeCtlCommandClearReport);
+    request.pid = pid;
+    return RoundTrip(request, response);
+  }
+
+ private:
+  /**
+   * @brief 执行一次本地升级控制 RPC。
+   * @param request 请求报文。
+   * @param response 应答输出参数。
+   * @return `true` 表示收到了合法应答。
+   */
+  bool RoundTrip(const upgraded::UpgradeCtlRequestV1& request,
+                 upgraded::UpgradeCtlResponseV1* response) {
+    const int fd = ::socket(AF_UNIX, SOCK_SEQPACKET | SOCK_CLOEXEC, 0);
+    if (fd < 0) return false;
+
+    sockaddr_un addr{};
+    addr.sun_family = AF_UNIX;
+    std::snprintf(addr.sun_path, sizeof(addr.sun_path), "%s",
+                  upgraded::kUpgradeControlSockPath);
+    if (::connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
+      ::close(fd);
+      return false;
+    }
+
+    const ssize_t send_rc =
+        ::send(fd, &request, sizeof(request), MSG_NOSIGNAL);
+    if (send_rc != static_cast<ssize_t>(sizeof(request))) {
+      ::close(fd);
+      return false;
+    }
+
+    const ssize_t recv_rc = ::recv(fd, response, sizeof(*response), 0);
+    ::close(fd);
+    return recv_rc == static_cast<ssize_t>(sizeof(*response)) &&
+           upgraded::IsValidUpgradeCtlResponseHeader(*response);
+  }
+};
+
+/**
+ * @brief 升级包分包接收状态机。
+ *
+ * @note WHY：`0x3C` 采用停等 + 重发模型，下位机必须对“重包”和“乱序包”作出不同处理。
+ * 若把重复包也重新写进 `pkg.part`，会直接破坏目标固件；若对同一包重复回失败 ACK，又会让
+ * 上位机在链路抖动时无法收敛，因此这里需要显式记录“最近一次成功 ACK”的包序号并支持去重。
+ */
+class UpgradeIngress {
+ public:
+  ~UpgradeIngress() { ClosePartFile(); }
+
+  /**
+   * @brief 处理一帧 `0x3C` 升级包数据。
+   * @param fr 协议帧。
+   * @param ctl_client 守护进程控制客户端。
+   * @return 返回针对该帧构造好的 `0x3C` ACK。
+   */
+  btt::proto::Frame HandlePacket(const btt::proto::Frame& fr,
+                                 UpgradedControlClient& ctl_client) {
+    uint8_t op = 0;
+    uint8_t flag = 0;
+    uint16_t pkt_seq = 0;
+    const uint8_t* data = nullptr;
+    size_t data_len = 0;
+    if (!ParsePacket(fr, &op, &flag, &pkt_seq, &data, &data_len)) {
+      return BuildAck(fr.seq, 0, 0, 0, upgraded::kUpgradeCtlResultFail,
+                      upgraded::kUpgradeCtlReasonParamInvalid);
+    }
+    if (flag > 2) {
+      return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonParamInvalid));
+    }
+    if (op != 0) {
+      return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonParamInvalid));
+    }
+
+    if (last_ack_valid_ && pkt_seq == last_ack_seq_ && flag == last_ack_flag_) {
+      LOGW("0x3C duplicate packet seq=%u flag=%u, resend last ack", pkt_seq, flag);
+      return BuildAck(fr.seq, op, flag, pkt_seq, last_ack_result_, last_ack_reason_);
+    }
+
+    if (flag == 0) {
+      return HandleStartPacket(fr.seq, op, flag, pkt_seq, data, data_len);
+    }
+    if (!active_) {
+      Reset(false);
+      return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonStateConflict));
+    }
+    if (pkt_seq != expected_seq_) {
+      Reset(true);
+      return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonSequenceInvalid));
+    }
+
+    if (!WriteChunk(data, data_len)) {
+      Reset(true);
+      return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonWritePkgPartFailed));
+    }
+    ++expected_seq_;
+
+    if (flag == 2) {
+      if (!FinishAndCommit(ctl_client)) {
+        Reset(true);
+        return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                    upgraded::kUpgradeCtlResultFail,
+                                    upgraded::kUpgradeCtlReasonCommitFailed));
+      }
+      ClosePartFile();
+      active_ = false;
+      quiet_mode_ = false;
+      install_pending_ = true;
+      expected_seq_ = 0;
+      received_bytes_ = 0;
+    }
+
+    return RememberAck(BuildAck(fr.seq, op, flag, pkt_seq,
+                                upgraded::kUpgradeCtlResultOk,
+                                upgraded::kUpgradeCtlReasonNone));
+  }
+
+  /**
+   * @brief 查询是否处于升级静默模式。
+   * @return 静默模式开启时返回 `true`。
+   */
+  bool quiet_mode() const { return quiet_mode_; }
+
+  /**
+   * @brief 在链路中断时终止尚未提交完成的升级接收会话。
+   */
+  void AbortActiveTransfer() {
+    if (!active_) return;
+    LOGW("abort active upgrade transfer due to disconnect");
+    Reset(true);
+  }
+
+ private:
+  static constexpr const char* kUpgradeDir = "/appfs/upgrade";
+  static constexpr const char* kPkgPartPath = "/appfs/upgrade/pkg.part";
+
+  bool ParsePacket(const btt::proto::Frame& fr, uint8_t* op, uint8_t* flag,
+                   uint16_t* pkt_seq, const uint8_t** data,
+                   size_t* data_len) const {
+    if (fr.payload.size() < 4) return false;
+    *op = fr.payload[0];
+    *flag = fr.payload[1];
+    *pkt_seq = uint16_t((uint16_t(fr.payload[2]) << 8) | fr.payload[3]);
+    *data = fr.payload.data() + 4;
+    *data_len = fr.payload.size() - 4;
+    return true;
+  }
+
+  static bool EnsureUpgradeDir() {
+    if (::mkdir("/appfs", 0755) != 0 && errno != EEXIST) return false;
+    if (::mkdir(kUpgradeDir, 0755) != 0 && errno != EEXIST) return false;
+    return true;
+  }
+
+  static bool FsyncDir(const char* path) {
+    const int dir_fd = ::open(path, O_RDONLY | O_DIRECTORY | O_CLOEXEC);
+    if (dir_fd < 0) return false;
+    const int rc = ::fsync(dir_fd);
+    ::close(dir_fd);
+    return rc == 0;
+  }
+
+  static bool WriteAllBytes(int fd, const void* data, size_t size) {
+    const uint8_t* bytes = static_cast<const uint8_t*>(data);
+    size_t written = 0;
+    while (written < size) {
+      const ssize_t rc = ::write(fd, bytes + written, size - written);
+      if (rc < 0) {
+        if (errno == EINTR) continue;
+        return false;
+      }
+      if (rc == 0) return false;
+      written += static_cast<size_t>(rc);
+    }
+    return true;
+  }
+
+  btt::proto::Frame BuildAck(uint16_t frame_seq, uint8_t op, uint8_t flag,
+                             uint16_t pkt_seq, uint8_t result,
+                             uint8_t reason) const {
+    btt::proto::Frame ack;
+    ack.cmd = 0x3C;
+    ack.level = 0x01;
+    ack.seq = frame_seq;
+    ack.payload.reserve(6);
+    ack.payload.push_back(result);
+    ack.payload.push_back(reason);
+    ack.payload.push_back(op);
+    ack.payload.push_back(flag);
+    ack.payload.push_back(uint8_t((pkt_seq >> 8) & 0xFF));
+    ack.payload.push_back(uint8_t(pkt_seq & 0xFF));
+    return ack;
+  }
+
+  btt::proto::Frame RememberAck(btt::proto::Frame ack) {
+    if (ack.payload.size() >= 6) {
+      last_ack_valid_ = true;
+      last_ack_result_ = ack.payload[0];
+      last_ack_reason_ = ack.payload[1];
+      last_ack_flag_ = ack.payload[3];
+      last_ack_seq_ =
+          uint16_t((uint16_t(ack.payload[4]) << 8) | ack.payload[5]);
+    }
+    return ack;
+  }
+
+  btt::proto::Frame HandleStartPacket(uint16_t frame_seq, uint8_t op, uint8_t flag,
+                                      uint16_t pkt_seq, const uint8_t* data,
+                                      size_t data_len) {
+    if (quiet_mode_ || active_ || install_pending_) {
+      return RememberAck(BuildAck(frame_seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonBusy));
+    }
+    if (pkt_seq != 0) {
+      return RememberAck(BuildAck(frame_seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonSequenceInvalid));
+    }
+    if (!EnsureUpgradeDir()) {
+      return RememberAck(BuildAck(frame_seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonWritePkgPartFailed));
+    }
+
+    (void)::unlink(kPkgPartPath);
+    part_fd_ =
+        ::open(kPkgPartPath, O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC, 0644);
+    if (part_fd_ < 0) {
+      return RememberAck(BuildAck(frame_seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonWritePkgPartFailed));
+    }
+
+    quiet_mode_ = true;
+    active_ = true;
+    expected_seq_ = 0;
+    received_bytes_ = 0;
+
+    if (!WriteChunk(data, data_len)) {
+      Reset(true);
+      return RememberAck(BuildAck(frame_seq, op, flag, pkt_seq,
+                                  upgraded::kUpgradeCtlResultFail,
+                                  upgraded::kUpgradeCtlReasonWritePkgPartFailed));
+    }
+    expected_seq_ = 1;
+    LOGI("0x3C start accepted seq=%u data_len=%zu", pkt_seq, data_len);
+    return RememberAck(BuildAck(frame_seq, op, flag, pkt_seq,
+                                upgraded::kUpgradeCtlResultOk,
+                                upgraded::kUpgradeCtlReasonNone));
+  }
+
+  bool WriteChunk(const uint8_t* data, size_t data_len) {
+    if (part_fd_ < 0) return false;
+    if (data_len == 0) return true;
+    if (!WriteAllBytes(part_fd_, data, data_len)) return false;
+    received_bytes_ += static_cast<uint32_t>(data_len);
+    return true;
+  }
+
+  bool FinishAndCommit(UpgradedControlClient& ctl_client) {
+    if (part_fd_ < 0) return false;
+    if (::fdatasync(part_fd_) != 0) {
+      LOGW("fdatasync pkg.part failed: %s", std::strerror(errno));
+      return false;
+    }
+    if (::close(part_fd_) != 0) {
+      LOGW("close pkg.part failed: %s", std::strerror(errno));
+      part_fd_ = -1;
+      return false;
+    }
+    part_fd_ = -1;
+    if (!FsyncDir(kUpgradeDir)) {
+      LOGW("fsync upgrade dir failed after pkg.part");
+      return false;
+    }
+
+    upgraded::UpgradeCtlResponseV1 response{};
+    if (!ctl_client.CommitPackage(static_cast<uint32_t>(::getpid()),
+                                  received_bytes_, &response)) {
+      LOGW("commit package rpc failed");
+      return false;
+    }
+    if (response.result != upgraded::kUpgradeCtlResultOk) {
+      LOGW("commit package rejected reason=0x%02X phase=%u target=%u", response.reason,
+           static_cast<unsigned>(response.upgrade_phase),
+           static_cast<unsigned>(response.target_part));
+      return false;
+    }
+    LOGI("0x3C end committed size=%u target=%u", received_bytes_,
+         static_cast<unsigned>(response.target_part));
+    return true;
+  }
+
+  void ClosePartFile() {
+    if (part_fd_ >= 0) {
+      ::close(part_fd_);
+      part_fd_ = -1;
+    }
+  }
+
+  void Reset(bool drop_part_file) {
+    ClosePartFile();
+    if (drop_part_file) (void)::unlink(kPkgPartPath);
+    active_ = false;
+    quiet_mode_ = false;
+    install_pending_ = false;
+    expected_seq_ = 0;
+    received_bytes_ = 0;
+  }
+
+  bool active_ = false;
+  bool quiet_mode_ = false;
+  bool install_pending_ = false;
+  int part_fd_ = -1;
+  uint16_t expected_seq_ = 0;
+  uint32_t received_bytes_ = 0;
+  bool last_ack_valid_ = false;
+  uint16_t last_ack_seq_ = 0;
+  uint8_t last_ack_flag_ = 0;
+  uint8_t last_ack_result_ = upgraded::kUpgradeCtlResultOk;
+  uint8_t last_ack_reason_ = upgraded::kUpgradeCtlReasonNone;
 };
 
 // 新增 ID 规则：
@@ -322,6 +700,8 @@ inline bool WriteFileAtomically(const std::string& path, const uint8_t* data,
 
 // ---------------- M5：持久化配置（/data/m5_cfg.bin） ----------------
 static constexpr const char* kM5CfgPath = "/data/m5_cfg.bin";
+static constexpr const char* kBootReconnectReasonPath =
+    "/data/boot_reconnect_reason.bin";
 
 /**
  * @brief 执行 `ip_be_to_string` 内部辅助逻辑。
@@ -710,6 +1090,53 @@ inline bool m5_write_persist(const M5PersistV1& in) {
   (void)ensure_dir("/data");
   return WriteFileAtomically(
       kM5CfgPath, reinterpret_cast<const uint8_t*>(&in), sizeof(M5PersistV1));
+}
+
+/**
+ * @brief 持久化一次性启动重连原因，供重启后的首轮认证使用。
+ * @param reason 待持久化的重连原因。
+ * @return `true` 表示写入成功，`false` 表示写入失败。
+ */
+inline bool save_boot_reconnect_reason(uint8_t reason) {
+  (void)ensure_dir("/data");
+  return WriteFileAtomically(kBootReconnectReasonPath, &reason, sizeof(reason));
+}
+
+/**
+ * @brief 读取一次性启动重连原因。
+ * @param out_reason 输出参数。
+ * @return `true` 表示读取到有效原因，`false` 表示无可用原因。
+ */
+inline bool load_boot_reconnect_reason(uint8_t& out_reason) {
+  out_reason = 0;
+  int fd = ::open(kBootReconnectReasonPath, O_RDONLY);
+  if (fd < 0) return false;
+
+  uint8_t reason = 0;
+  size_t off = 0;
+  while (off < sizeof(reason)) {
+    const ssize_t r = ::read(fd, &reason + off, sizeof(reason) - off);
+    if (r < 0) {
+      if (errno == EINTR) continue;
+      ::close(fd);
+      return false;
+    }
+    if (r == 0) break;
+    off += static_cast<size_t>(r);
+  }
+  ::close(fd);
+  if (off != sizeof(reason)) return false;
+  out_reason = reason;
+  return true;
+}
+
+/**
+ * @brief 删除一次性启动重连原因文件。
+ */
+inline void clear_boot_reconnect_reason() {
+  if (::unlink(kBootReconnectReasonPath) != 0 && errno != ENOENT) {
+    LOGW("clear boot reconnect reason failed errno=%d", errno);
+  }
 }
 
 static constexpr uint16_t kM8DelayMaxMs = 500;
@@ -1175,6 +1602,107 @@ inline void handle_heartbeat_resp(const btt::proto::Frame& fr, RuntimeConfig& rt
   }
   (void)sync_system_time_from_bcd8(&fr.payload[0]);
   rt.hb_miss.store(0);
+}
+
+/**
+ * @brief 构造升级结果事件 `0x58`。
+ * @param rt 共享运行态。
+ * @param report_result 守护进程持久化的升级结果。
+ * @param report_reason 守护进程持久化的升级结果原因码。
+ * @return 返回待发送的事件帧。
+ */
+inline btt::proto::Frame make_upgrade_result_58_req(RuntimeConfig& rt,
+                                                    uint8_t report_result,
+                                                    uint8_t report_reason) {
+  btt::proto::Frame f;
+  f.cmd = 0x58;
+  f.level = 0x00;
+  f.seq = rt.seq.fetch_add(1);
+  f.payload = {0x00, report_result, report_reason};
+  return f;
+}
+
+/**
+ * @brief 处理 `0x58` 上位机 ACK。
+ * @param fr 协议帧。
+ * @param ctl_client 升级控制客户端。
+ */
+inline void handle_upgrade_result_58_resp(
+    const btt::proto::Frame& fr, UpgradedControlClient& ctl_client) {
+  if (fr.payload.size() < 2) {
+    LOGW("0x58 ACK payload too short: %zu", fr.payload.size());
+    return;
+  }
+  const uint8_t result = fr.payload[0];
+  const uint8_t reason = fr.payload[1];
+  if (result != 0x00) {
+    LOGW("0x58 ACK failed: result=%u reason=0x%02X", result, reason);
+    return;
+  }
+
+  upgraded::UpgradeCtlResponseV1 response{};
+  if (!ctl_client.ClearReport(static_cast<uint32_t>(::getpid()), &response)) {
+    LOGW("0x58 ACK clear report rpc failed");
+    return;
+  }
+  if (response.result != upgraded::kUpgradeCtlResultOk) {
+    LOGW("0x58 ACK clear report rejected reason=0x%02X", response.reason);
+    return;
+  }
+  LOGI("0x58 ACK accepted, clear report pending");
+}
+
+/**
+ * @brief 在认证成功后查询并发送待上报的升级结果。
+ * @param rt 共享运行态。
+ * @param ctl_client 升级控制客户端。
+ * @param outbound 输出队列。
+ * @return 本次是否成功入队 `0x58` 结果事件。
+ */
+inline bool maybe_send_upgrade_result_after_auth(
+    RuntimeConfig& rt, UpgradedControlClient& ctl_client,
+    btt::utils::BlockingQueue<btt::proto::Frame>& outbound) {
+  upgraded::UpgradeCtlResponseV1 response{};
+  if (!ctl_client.QueryReport(static_cast<uint32_t>(::getpid()), &response)) {
+    LOGW("query upgrade report rpc failed after auth");
+    return false;
+  }
+  if (response.result != upgraded::kUpgradeCtlResultOk) {
+    LOGW("query upgrade report rejected reason=0x%02X", response.reason);
+    return false;
+  }
+  if (response.report_pending == 0) return false;
+
+  LOGI("queue 0x58 upgrade result result=%u reason=0x%02X phase=%u",
+       static_cast<unsigned>(response.report_result),
+       static_cast<unsigned>(response.report_reason),
+       static_cast<unsigned>(response.upgrade_phase));
+  outbound.push(make_upgrade_result_58_req(rt, response.report_result,
+                                           response.report_reason));
+  return true;
+}
+
+/**
+ * @brief 判断升级静默模式下是否应拒绝某个业务命令。
+ * @param cmd 功能码。
+ * @return 需要拒绝时返回 `true`。
+ */
+inline bool should_reject_cmd_during_upgrade_quiet(uint8_t cmd) {
+  switch (cmd) {
+    case 0x30:
+    case 0x31:
+    case 0x33:
+    case 0x35:
+    case 0x36:
+    case 0x38:
+    case 0x39:
+    case 0x3A:
+    case 0x41:
+    case 0xA6:
+      return true;
+    default:
+      return false;
+  }
 }
 
 // ---------- M2.1：0x20/0x21 设备配置 ----------
@@ -6002,6 +6530,14 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
   // M5：加载持久化配置 + misc 初始化
   hgs_misc_init();
   m5_load_into_runtime(def, rt);
+  {
+    uint8_t boot_reason = 0;
+    if (load_boot_reconnect_reason(boot_reason)) {
+      rt.reconnect_reason.store(boot_reason);
+      clear_boot_reconnect_reason();
+      LOGI("BOOT reconnect reason restored: %u", unsigned(boot_reason));
+    }
+  }
   (void)m5_apply_persisted_eth0_if_ready(rt);
 
   // M7：绑定实时流到媒体回调与控制通道
@@ -6019,6 +6555,9 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
   std::atomic<uint8_t> final_control_action{
       static_cast<uint8_t>(CoreControlAction::None)};
   UpgradedWatchdogClient watchdog_client;
+  UpgradedControlClient upgrade_ctl_client;
+  UpgradeIngress upgrade_ingress;
+  bool upgrade_report_sent_for_auth = false;
   int64_t last_watchdog_tx_ms = 0;
   constexpr uint32_t kTimerWatchdogStepMs = 50;
   constexpr int kReconnectConnectTimeoutMs = 500;
@@ -6081,6 +6620,7 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
   auto disconnect = [&](uint8_t reason){
     LOGW("DISCONNECT reason=%u", reason);
     cli.close_fd();
+    upgrade_ingress.AbortActiveTransfer();
     pending_control_action.store(static_cast<uint8_t>(CoreControlAction::None));
     pending_control_seq.store(0);
     pending_net_active.store(false);
@@ -6094,6 +6634,7 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
     rt.authed.store(false);
     rt.hb_miss.store(0);
     decoder.reset();
+    upgrade_report_sent_for_auth = false;
     rt.reconnect_reason.store(reason);
   };
 
@@ -6152,8 +6693,13 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
 
       // 设备侧：收到0x00/0x01 一律按服务器应答处理
       if (fr.cmd == 0x00) {
+        const bool was_authed = rt.authed.load();
         handle_auth_resp(fr, rt);
         if (!rt.authed.load()) disconnect(19);
+        if (!was_authed && rt.authed.load() && !upgrade_report_sent_for_auth) {
+          upgrade_report_sent_for_auth = maybe_send_upgrade_result_after_auth(
+              rt, upgrade_ctl_client, outbound);
+        }
         continue;
       }
       if (fr.cmd == 0x01) {
@@ -6164,6 +6710,22 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
       // 内部：M8 超时触发
       if (fr.cmd == kCmdInternalM8Timeout) {
         handle_m8_internal_timeout(fr, rt, media, m8_state, m8_active_eid, m8_active_type, m8_deadline_ms, outbound);
+        continue;
+      }
+
+      if (fr.cmd == 0x3C) {
+        outbound.push(upgrade_ingress.HandlePacket(fr, upgrade_ctl_client));
+        continue;
+      }
+      if (fr.cmd == 0x58) {
+        handle_upgrade_result_58_resp(fr, upgrade_ctl_client);
+        continue;
+      }
+
+      if (upgrade_ingress.quiet_mode() &&
+          should_reject_cmd_during_upgrade_quiet(fr.cmd)) {
+        LOGW("upgrade quiet mode reject cmd=0x%02X seq=%u", fr.cmd, fr.seq);
+        outbound.push(make_resp_2b(fr.cmd, fr.seq, 0x01, 0x02));
         continue;
       }
 
@@ -6575,9 +7137,15 @@ int RunCore(const DefaultConfig& def, RuntimeConfig& rt,
 
   const uint8_t action = final_control_action.load();
   if (action == static_cast<uint8_t>(CoreControlAction::RestartProgram)) {
+    if (!save_boot_reconnect_reason(5)) {
+      LOGW("persist boot reconnect reason failed: reason=5 errno=%d", errno);
+    }
     return kRunCoreExitRestartProgram;
   }
   if (action == static_cast<uint8_t>(CoreControlAction::RebootDevice)) {
+    if (!save_boot_reconnect_reason(5)) {
+      LOGW("persist boot reconnect reason failed: reason=5 errno=%d", errno);
+    }
     return kRunCoreExitRebootDevice;
   }
   return 0;

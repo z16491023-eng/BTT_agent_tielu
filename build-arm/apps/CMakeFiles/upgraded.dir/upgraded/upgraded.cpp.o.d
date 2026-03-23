@@ -270,4 +270,5 @@ apps/CMakeFiles/upgraded.dir/upgraded/upgraded.cpp.o: \
  /home/li/hi_project/Btt-agent/libs/utils/log.hpp \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstdarg \
  /opt/linux/x86-arm/arm-mix410-linux/arm-linux-gnueabi/include/c++/7.3.0/cstddef \
+ /home/li/hi_project/Btt-agent/include/upgraded/upgrade_control_protocol.h \
  /home/li/hi_project/Btt-agent/include/upgraded/watchdog_protocol.h

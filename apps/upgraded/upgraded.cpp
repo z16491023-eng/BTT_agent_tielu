@@ -46,6 +46,7 @@
 
 #include "external/include/ot_wtdg.h"
 #include "libs/utils/log.hpp"
+#include "upgraded/upgrade_control_protocol.h"
 #include "upgraded/watchdog_protocol.h"
 
 namespace upgraded {
@@ -60,22 +61,32 @@ constexpr const char* kUpgradeDir = "/appfs/upgrade";
 constexpr const char* kStatePath = "/appfs/upgrade/state.bin";
 constexpr const char* kStateTmpPath = "/appfs/upgrade/state.bin.tmp";
 constexpr const char* kStateBadPrefix = "/appfs/upgrade/state.bin.bad";
+constexpr const char* kPkgPartPath = "/appfs/upgrade/pkg.part";
+constexpr const char* kPkgBinPath = "/appfs/upgrade/pkg.bin";
 constexpr const char* kLockPath = "/appfs/upgrade/upgraded.lock";
 constexpr const char* kCurrentPath = "/appfs/current";
 constexpr const char* kCurrentTmpPath = "/appfs/current.new";
 constexpr const char* kCurrentAppPath = "/appfs/current/app.bin";
+constexpr const char* kSlotADir = "/appfs/slots/A";
+constexpr const char* kSlotAAppPath = "/appfs/slots/A/app.bin";
+constexpr const char* kSlotAAppTmpPath = "/appfs/slots/A/app.bin.tmp";
+constexpr const char* kSlotBDir = "/appfs/slots/B";
+constexpr const char* kSlotBAppPath = "/appfs/slots/B/app.bin";
+constexpr const char* kSlotBAppTmpPath = "/appfs/slots/B/app.bin.tmp";
 constexpr const char* kSlotARelPath = "slots/A";
 constexpr const char* kSlotBRelPath = "slots/B";
 constexpr const char* kHardwareWatchdogPath = "/dev/watchdog";
 
 constexpr uint8_t kMagic[4] = {'U', 'P', 'G', '1'};
-constexpr uint16_t kStateVersion = 2;
+constexpr uint16_t kStateVersion = 3;
 constexpr uint32_t kDefaultBootLimit = 3;
+constexpr uint8_t kPartNone = 0;
 constexpr uint8_t kPartA = 2;
 constexpr uint8_t kPartB = 3;
 constexpr uint8_t kBootActionNormal = 1;
 constexpr uint8_t kBootActionRollback = 2;
 constexpr uint32_t kFailReasonBootcountExceeded = 0x4001;
+constexpr uint32_t kFailReasonUpgradeInstallFailed = 0x4002;
 
 constexpr uint32_t kRestartBackoffInitMs = 200;
 constexpr uint32_t kRestartBackoffMaxMs = 2000;
@@ -88,27 +99,32 @@ volatile sig_atomic_t g_child_pid = -1;
 #pragma pack(push, 1)
 /**
  * @brief `state.bin` 的当前磁盘结构。
- * @note 当前仅支持结构版本 2；旧版 `state.bin` 会按非法状态文件处理并重建。
- * `reboot_count/reboot_limit` 字段当前保留未启用，后续若要恢复系统级策略可复用。
+ * @note 当前仅支持结构版本 3；旧版 `state.bin` 会按非法状态文件处理并重建。
+ * WHY：里程碑4需要把“包已提交/待安装/测试中/结果待上报”持久化到守护进程侧，否则
+ * 断电、守护进程重启或网络重连后，`0x58` 的最终结果就会丢失，且守护进程无法恢复安装流程。
  */
 struct StateDisk {
   uint8_t magic[4];
   uint16_t ver;
   uint16_t size;
   uint8_t upgrade_available;
+  uint8_t boot_action;
+  uint8_t mender_boot_part;
+  uint8_t upgrade_phase;
+  uint8_t target_part;
+  uint8_t report_pending;
+  uint8_t report_result;
+  uint8_t report_reason;
   uint32_t bootcount;
   uint32_t bootlimit;
-  uint8_t mender_boot_part;
-  uint8_t boot_action;
   uint32_t last_fail_reason;
-  uint32_t reboot_count;
-  uint32_t reboot_limit;
-  uint32_t reserved[2];
+  uint32_t pkg_size;
+  uint32_t reserved[1];
   uint32_t crc32;
 };
 #pragma pack(pop)
 
-static_assert(sizeof(StateDisk) == 43u, "StateDisk size must remain stable");
+static_assert(sizeof(StateDisk) == 40u, "StateDisk size must remain stable");
 
 struct WatchdogRuntime {
   std::mutex mu;
@@ -123,10 +139,12 @@ struct WatchdogRuntime {
   bool restart_requested = false;
   uint32_t restart_reason = 0;
   uint32_t last_bad_reason = 0;
+  bool planned_restart = false;
 };
 
 struct ChildExitHealth {
   bool healthy_confirmed = false;
+  bool planned_restart = false;
 };
 
 WatchdogRuntime g_watchdog;
@@ -136,6 +154,12 @@ std::mutex g_level1_mu;
 std::deque<int64_t> g_level1_events;
 std::atomic<bool> g_watchdog_thread_ready{false};
 std::atomic<bool> g_watchdog_thread_failed{false};
+std::atomic<bool> g_control_thread_ready{false};
+std::atomic<bool> g_control_thread_failed{false};
+std::atomic<bool> g_install_requested{false};
+
+const char* SlotRelPathForPart(uint8_t part);
+uint8_t OtherPart(uint8_t part);
 
 int64_t NowMsSteady() {
   return std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -155,11 +179,21 @@ const char* BootActionName(uint8_t action) {
   return "UNKNOWN";
 }
 
+const char* UpgradePhaseName(uint8_t phase) {
+  if (phase == kUpgradePhaseNone) return "NONE";
+  if (phase == kUpgradePhasePkgReady) return "PKG_READY";
+  if (phase == kUpgradePhaseInstalling) return "INSTALLING";
+  if (phase == kUpgradePhaseTesting) return "TESTING";
+  if (phase == kUpgradePhaseResultPending) return "RESULT_PENDING";
+  return "UNKNOWN";
+}
+
 void LogStateSnapshot(const char* tag, const StateDisk& state) {
   LOGI(
       "%s ver=%u size=%u upgrade_available=%u bootcount=%u bootlimit=%u "
-      "part=%s(%u) boot_action=%s(%u) last_fail_reason=0x%08X "
-      "reboot_count=%u reboot_limit=%u reserved=[0x%08X,0x%08X] crc32=0x%08X",
+      "part=%s(%u) boot_action=%s(%u) phase=%s(%u) target=%s(%u) "
+      "report_pending=%u report_result=%u report_reason=0x%02X "
+      "last_fail_reason=0x%08X pkg_size=%u reserved=0x%08X crc32=0x%08X",
       tag, static_cast<unsigned>(state.ver), static_cast<unsigned>(state.size),
       static_cast<unsigned>(state.upgrade_available),
       static_cast<unsigned>(state.bootcount),
@@ -167,11 +201,15 @@ void LogStateSnapshot(const char* tag, const StateDisk& state) {
       static_cast<unsigned>(state.mender_boot_part),
       BootActionName(state.boot_action),
       static_cast<unsigned>(state.boot_action),
+      UpgradePhaseName(state.upgrade_phase),
+      static_cast<unsigned>(state.upgrade_phase), PartName(state.target_part),
+      static_cast<unsigned>(state.target_part),
+      static_cast<unsigned>(state.report_pending),
+      static_cast<unsigned>(state.report_result),
+      static_cast<unsigned>(state.report_reason),
       static_cast<unsigned>(state.last_fail_reason),
-      static_cast<unsigned>(state.reboot_count),
-      static_cast<unsigned>(state.reboot_limit),
+      static_cast<unsigned>(state.pkg_size),
       static_cast<unsigned>(state.reserved[0]),
-      static_cast<unsigned>(state.reserved[1]),
       static_cast<unsigned>(state.crc32));
 }
 
@@ -327,15 +365,18 @@ StateDisk MakeDefaultState() {
   state.ver = kStateVersion;
   state.size = static_cast<uint16_t>(sizeof(StateDisk));
   state.upgrade_available = 0;
+  state.boot_action = kBootActionNormal;
+  state.mender_boot_part = kPartA;
+  state.upgrade_phase = kUpgradePhaseNone;
+  state.target_part = kPartNone;
+  state.report_pending = 0;
+  state.report_result = kUpgradeReportResultSuccess;
+  state.report_reason = kUpgradeReportReasonNone;
   state.bootcount = 0;
   state.bootlimit = kDefaultBootLimit;
-  state.mender_boot_part = kPartA;
-  state.boot_action = kBootActionNormal;
   state.last_fail_reason = 0;
-  state.reboot_count = 0;
-  state.reboot_limit = 0;
+  state.pkg_size = 0;
   state.reserved[0] = 0;
-  state.reserved[1] = 0;
   state.crc32 = CalculateStateCrc(state);
   return state;
 }
@@ -372,6 +413,23 @@ bool ValidateState(const StateDisk& state, std::string* reason) {
   }
   if (!ValidateCommonFields(state.upgrade_available, state.mender_boot_part,
                             state.boot_action, reason)) {
+    return false;
+  }
+  if (state.upgrade_phase > kUpgradePhaseResultPending) {
+    *reason = "upgrade_phase invalid";
+    return false;
+  }
+  if (state.target_part != kPartNone && state.target_part != kPartA &&
+      state.target_part != kPartB) {
+    *reason = "target_part invalid";
+    return false;
+  }
+  if (state.report_pending > 1) {
+    *reason = "report_pending invalid";
+    return false;
+  }
+  if (state.report_result > kUpgradeReportResultFail) {
+    *reason = "report_result invalid";
     return false;
   }
   if (CalculateStateCrc(state) != state.crc32) {
@@ -445,6 +503,141 @@ bool AtomicSwitchCurrent(const char* slot_rel_path) {
   if (!FsyncDirectory(kAppFsDir)) return false;
   LOGI("atomic switch current done current=%s target=%s", kCurrentPath,
        slot_rel_path);
+  return true;
+}
+
+const char* SlotDirForPart(uint8_t part) {
+  return (part == kPartB) ? kSlotBDir : kSlotADir;
+}
+
+const char* SlotAppPathForPart(uint8_t part) {
+  return (part == kPartB) ? kSlotBAppPath : kSlotAAppPath;
+}
+
+const char* SlotTmpPathForPart(uint8_t part) {
+  return (part == kPartB) ? kSlotBAppTmpPath : kSlotAAppTmpPath;
+}
+
+uint8_t MapUpgradeReportReason(uint32_t fail_reason) {
+  if (fail_reason == 0) return kUpgradeReportReasonNone;
+  if (fail_reason == kWatchdogFailHeartbeatTimeout) {
+    return kUpgradeReportReasonWatchdogTimeout;
+  }
+  if (fail_reason == kWatchdogFailThreadStall) {
+    return kUpgradeReportReasonThreadStall;
+  }
+  if (fail_reason == kFailReasonBootcountExceeded ||
+      fail_reason == kFailReasonUpgradeInstallFailed) {
+    return kUpgradeReportReasonRollback;
+  }
+  if ((fail_reason & 0xF000u) == 0x1000u ||
+      (fail_reason & 0xF000u) == 0x2000u) {
+    return kUpgradeReportReasonStartFailed;
+  }
+  return kUpgradeReportReasonRollback;
+}
+
+void SetUpgradeReportLocked(uint8_t result, uint8_t reason) {
+  g_state.report_pending = 1;
+  g_state.report_result = result;
+  g_state.report_reason = reason;
+  g_state.upgrade_phase = kUpgradePhaseResultPending;
+  g_state.target_part = kPartNone;
+}
+
+bool PromotePackagePartToPkgBin(uint32_t* pkg_size) {
+  struct stat part_stat {};
+  if (::stat(kPkgPartPath, &part_stat) != 0) {
+    LOGE("stat pkg.part failed: %s", std::strerror(errno));
+    return false;
+  }
+  if (!S_ISREG(part_stat.st_mode) || part_stat.st_size <= 0) {
+    LOGE("pkg.part invalid mode=%o size=%lld",
+         static_cast<unsigned>(part_stat.st_mode),
+         static_cast<long long>(part_stat.st_size));
+    errno = EINVAL;
+    return false;
+  }
+
+  (void)::unlink(kPkgBinPath);
+  if (::rename(kPkgPartPath, kPkgBinPath) != 0) {
+    LOGE("rename pkg.part -> pkg.bin failed: %s", std::strerror(errno));
+    return false;
+  }
+  if (!FsyncDirectory(kUpgradeDir)) return false;
+  *pkg_size = static_cast<uint32_t>(part_stat.st_size);
+  LOGI("package committed pkg=%s size=%u", kPkgBinPath,
+       static_cast<unsigned>(*pkg_size));
+  return true;
+}
+
+bool CopyFileToSlotAtomically(const char* src_path, uint8_t target_part) {
+  if (!EnsureDirRecursive(SlotDirForPart(target_part))) {
+    LOGE("slot dir create failed part=%s(%u)", PartName(target_part),
+         static_cast<unsigned>(target_part));
+    return false;
+  }
+
+  const int src_fd = ::open(src_path, O_RDONLY | O_CLOEXEC);
+  if (src_fd < 0) {
+    LOGE("open package failed path=%s err=%s", src_path, std::strerror(errno));
+    return false;
+  }
+
+  const char* const dst_tmp_path = SlotTmpPathForPart(target_part);
+  const char* const dst_path = SlotAppPathForPart(target_part);
+  const int dst_fd =
+      ::open(dst_tmp_path, O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC, 0755);
+  if (dst_fd < 0) {
+    LOGE("open slot tmp failed path=%s err=%s", dst_tmp_path,
+         std::strerror(errno));
+    (void)::close(src_fd);
+    return false;
+  }
+
+  bool ok = true;
+  char buffer[64 * 1024];
+  for (;;) {
+    const ssize_t read_rc = ::read(src_fd, buffer, sizeof(buffer));
+    if (read_rc == 0) break;
+    if (read_rc < 0) {
+      if (errno == EINTR) continue;
+      LOGE("read package failed: %s", std::strerror(errno));
+      ok = false;
+      break;
+    }
+    if (!WriteAll(dst_fd, buffer, static_cast<size_t>(read_rc))) {
+      LOGE("write slot tmp failed: %s", std::strerror(errno));
+      ok = false;
+      break;
+    }
+  }
+  if (ok && ::fchmod(dst_fd, 0755) != 0) {
+    LOGE("chmod slot tmp failed: %s", std::strerror(errno));
+    ok = false;
+  }
+  if (ok && ::fdatasync(dst_fd) != 0) {
+    LOGE("fdatasync slot tmp failed: %s", std::strerror(errno));
+    ok = false;
+  }
+  if (::close(dst_fd) != 0) {
+    LOGW("close slot tmp failed: %s", std::strerror(errno));
+  }
+  if (::close(src_fd) != 0) {
+    LOGW("close package failed: %s", std::strerror(errno));
+  }
+  if (!ok) {
+    (void)::unlink(dst_tmp_path);
+    return false;
+  }
+  if (::rename(dst_tmp_path, dst_path) != 0) {
+    LOGE("rename slot tmp failed: %s", std::strerror(errno));
+    (void)::unlink(dst_tmp_path);
+    return false;
+  }
+  if (!FsyncDirectory(SlotDirForPart(target_part))) return false;
+  LOGI("slot image updated part=%s(%u) path=%s", PartName(target_part),
+       static_cast<unsigned>(target_part), dst_path);
   return true;
 }
 
@@ -579,6 +772,79 @@ bool NoteLevel1RestartAndShouldReboot() {
   return true;
 }
 
+bool InstallPendingPackageLocked() {
+  uint8_t target_part = g_state.target_part;
+  if (target_part != kPartA && target_part != kPartB) {
+    target_part = OtherPart(g_state.mender_boot_part);
+    g_state.target_part = target_part;
+  }
+
+  if (g_state.upgrade_phase != kUpgradePhaseInstalling) {
+    g_state.upgrade_phase = kUpgradePhaseInstalling;
+    if (!PersistStateLocked()) return false;
+  }
+
+  LOGI("install pending package target_part=%s(%u) pkg=%s", PartName(target_part),
+       static_cast<unsigned>(target_part), kPkgBinPath);
+  if (!CopyFileToSlotAtomically(kPkgBinPath, target_part)) {
+    g_state.last_fail_reason = kFailReasonUpgradeInstallFailed;
+    SetUpgradeReportLocked(kUpgradeReportResultFail,
+                           kUpgradeReportReasonRollback);
+    g_state.upgrade_available = 0;
+    if (!PersistStateLocked()) {
+      LOGE("persist install failure state failed");
+      return false;
+    }
+    return true;
+  }
+
+  if (!AtomicSwitchCurrent(SlotRelPathForPart(target_part))) {
+    g_state.last_fail_reason = kFailReasonUpgradeInstallFailed;
+    SetUpgradeReportLocked(kUpgradeReportResultFail,
+                           kUpgradeReportReasonRollback);
+    g_state.upgrade_available = 0;
+    if (!PersistStateLocked()) {
+      LOGE("persist switch current failure state failed");
+      return false;
+    }
+    return AtomicSwitchCurrent(SlotRelPathForPart(g_state.mender_boot_part));
+  }
+
+  g_state.mender_boot_part = target_part;
+  g_state.upgrade_phase = kUpgradePhaseTesting;
+  g_state.upgrade_available = 1;
+  g_state.bootcount = 0;
+  g_state.bootlimit = (g_state.bootlimit == 0) ? kDefaultBootLimit
+                                               : g_state.bootlimit;
+  g_state.boot_action = kBootActionNormal;
+  g_state.last_fail_reason = 0;
+  g_state.report_pending = 0;
+  g_state.report_result = kUpgradeReportResultSuccess;
+  g_state.report_reason = kUpgradeReportReasonNone;
+  return PersistStateLocked();
+}
+
+bool FinalizeUpgradeSuccessLocked() {
+  if (g_state.upgrade_phase != kUpgradePhaseTesting ||
+      g_state.upgrade_available != 1) {
+    return true;
+  }
+
+  g_state.upgrade_available = 0;
+  g_state.bootcount = 0;
+  g_state.boot_action = kBootActionNormal;
+  g_state.last_fail_reason = 0;
+  SetUpgradeReportLocked(kUpgradeReportResultSuccess,
+                         kUpgradeReportReasonNone);
+  LOGI("upgrade testing finished successfully, report pending");
+  return PersistStateLocked();
+}
+
+bool FinalizeUpgradeSuccess() {
+  std::lock_guard<std::mutex> lock(g_state_mu);
+  return FinalizeUpgradeSuccessLocked();
+}
+
 bool MarkRollbackPendingLocked(uint32_t fail_reason) {
   g_state.boot_action = kBootActionRollback;
   g_state.last_fail_reason = fail_reason;
@@ -587,6 +853,9 @@ bool MarkRollbackPendingLocked(uint32_t fail_reason) {
 }
 
 bool ExecuteRollbackLocked() {
+  const bool report_upgrade_failure =
+      (g_state.upgrade_phase == kUpgradePhaseTesting) ||
+      (g_state.upgrade_available == 1);
   const uint8_t target_part = OtherPart(g_state.mender_boot_part);
   LOGW("execute rollback current_part=%s(%u) target_part=%s(%u)",
        PartName(g_state.mender_boot_part),
@@ -599,7 +868,16 @@ bool ExecuteRollbackLocked() {
   g_state.bootlimit = (g_state.bootlimit == 0) ? kDefaultBootLimit
                                                : g_state.bootlimit;
   g_state.boot_action = kBootActionNormal;
-  g_state.reboot_count = 0;
+  if (report_upgrade_failure) {
+    SetUpgradeReportLocked(kUpgradeReportResultFail,
+                           MapUpgradeReportReason(g_state.last_fail_reason));
+  } else {
+    g_state.upgrade_phase = kUpgradePhaseNone;
+    g_state.target_part = kPartNone;
+    g_state.report_pending = 0;
+    g_state.report_result = kUpgradeReportResultSuccess;
+    g_state.report_reason = kUpgradeReportReasonNone;
+  }
   if (!PersistStateLocked()) return false;
   return AtomicSwitchCurrent(SlotRelPathForPart(target_part));
 }
@@ -612,6 +890,16 @@ bool PrepareStartup() {
     LOGW("consume rollback action, current part=%u",
          static_cast<unsigned>(g_state.mender_boot_part));
     return ExecuteRollbackLocked();
+  }
+
+  if (g_state.upgrade_phase == kUpgradePhasePkgReady ||
+      g_state.upgrade_phase == kUpgradePhaseInstalling) {
+    LOGI("resume pending install phase=%s(%u)", UpgradePhaseName(g_state.upgrade_phase),
+         static_cast<unsigned>(g_state.upgrade_phase));
+    if (!InstallPendingPackageLocked()) {
+      LOGE("resume install failed");
+      return false;
+    }
   }
 
   if (g_state.upgrade_available == 1) {
@@ -714,6 +1002,7 @@ void ResetWatchdogForSpawnLocked(pid_t child_pid) {
   g_watchdog.restart_requested = false;
   g_watchdog.restart_reason = 0;
   g_watchdog.last_bad_reason = 0;
+  g_watchdog.planned_restart = false;
   CloseWatchdogClientLocked();
 }
 
@@ -724,6 +1013,7 @@ void MarkWatchdogChildExitedLocked() {
   g_watchdog.healthy_since_ms = 0;
   g_watchdog.healthy_confirmed = false;
   g_watchdog.last_bad_reason = 0;
+  g_watchdog.planned_restart = false;
   CloseWatchdogClientLocked();
 }
 
@@ -740,6 +1030,7 @@ ChildExitHealth ConsumeChildExitHealth() {
   std::lock_guard<std::mutex> lock(g_watchdog.mu);
   ChildExitHealth health;
   health.healthy_confirmed = g_watchdog.healthy_confirmed;
+  health.planned_restart = g_watchdog.planned_restart;
   MarkWatchdogChildExitedLocked();
   return health;
 }
@@ -769,6 +1060,260 @@ void FeedHardwareWatchdogLocked() {
 }
 
 void CloseHardwareWatchdogLocked() { CloseFd(&g_watchdog.hw_fd); }
+
+void FillUpgradeCtlResponseFromStateLocked(UpgradeCtlResponseV1* response) {
+  response->report_pending = g_state.report_pending;
+  response->report_result = g_state.report_result;
+  response->report_reason = g_state.report_reason;
+  response->upgrade_phase = g_state.upgrade_phase;
+  response->target_part = g_state.target_part;
+  response->pkg_size = g_state.pkg_size;
+}
+
+bool SendUpgradeCtlResponse(int fd, const UpgradeCtlResponseV1& response) {
+  const ssize_t rc =
+      ::send(fd, &response, sizeof(response), MSG_NOSIGNAL | MSG_DONTWAIT);
+  if (rc == static_cast<ssize_t>(sizeof(response))) return true;
+  LOGW("send upgraded ctl response failed: %s", std::strerror(errno));
+  return false;
+}
+
+bool ReceiveUpgradeCtlRequest(int fd, UpgradeCtlRequestV1* request) {
+  const ssize_t rc = ::recv(fd, request, sizeof(*request), 0);
+  if (rc == static_cast<ssize_t>(sizeof(*request))) return true;
+  LOGW("recv upgraded ctl request failed rc=%zd err=%s", static_cast<long long>(rc),
+       std::strerror(errno));
+  return false;
+}
+
+bool OpenSeqpacketServer(const char* sock_path, int* server_fd) {
+  *server_fd = -1;
+  if (!EnsureDirRecursive(kUpgradeDir)) {
+    LOGE("socket dir create failed: %s", kUpgradeDir);
+    return false;
+  }
+
+  (void)::unlink(sock_path);
+  *server_fd = ::socket(AF_UNIX, SOCK_SEQPACKET | SOCK_CLOEXEC, 0);
+  if (*server_fd < 0) {
+    LOGE("socket create failed path=%s err=%s", sock_path, std::strerror(errno));
+    return false;
+  }
+  if (!SetNonBlocking(*server_fd)) {
+    LOGE("set socket nonblock failed path=%s err=%s", sock_path,
+         std::strerror(errno));
+    CloseFd(server_fd);
+    return false;
+  }
+
+  sockaddr_un addr {};
+  addr.sun_family = AF_UNIX;
+  std::snprintf(addr.sun_path, sizeof(addr.sun_path), "%s", sock_path);
+  if (::bind(*server_fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
+    LOGE("bind socket failed path=%s err=%s", sock_path, std::strerror(errno));
+    CloseFd(server_fd);
+    return false;
+  }
+  if (!FsyncDirectory(kUpgradeDir)) {
+    CloseFd(server_fd);
+    return false;
+  }
+  if (::listen(*server_fd, 4) != 0) {
+    LOGE("listen socket failed path=%s err=%s", sock_path, std::strerror(errno));
+    CloseFd(server_fd);
+    return false;
+  }
+  return true;
+}
+
+bool RequestPlannedChildRestart() {
+  pid_t child_pid = 0;
+  {
+    std::lock_guard<std::mutex> lock(g_watchdog.mu);
+    child_pid = g_watchdog.active_pid;
+    if (child_pid <= 0) return true;
+    g_watchdog.planned_restart = true;
+  }
+  if (::kill(child_pid, SIGTERM) != 0 && errno != ESRCH) {
+    LOGW("planned restart kill child failed pid=%d err=%s",
+         static_cast<int>(child_pid), std::strerror(errno));
+    return false;
+  }
+  LOGI("planned restart requested pid=%d for upgrade switch",
+       static_cast<int>(child_pid));
+  return true;
+}
+
+bool HandleCommitPackageRequest(const UpgradeCtlRequestV1& request,
+                                UpgradeCtlResponseV1* response) {
+  if (request.pid == 0) {
+    response->result = kUpgradeCtlResultFail;
+    response->reason = kUpgradeCtlReasonParamInvalid;
+    return true;
+  }
+  {
+    std::lock_guard<std::mutex> lock(g_watchdog.mu);
+    if (g_watchdog.active_pid <= 0 ||
+        request.pid != static_cast<uint32_t>(g_watchdog.active_pid)) {
+      response->result = kUpgradeCtlResultFail;
+      response->reason = kUpgradeCtlReasonStateConflict;
+      return true;
+    }
+  }
+  if (g_install_requested.load()) {
+    response->result = kUpgradeCtlResultFail;
+    response->reason = kUpgradeCtlReasonBusy;
+    return true;
+  }
+
+  {
+    std::lock_guard<std::mutex> lock(g_state_mu);
+    if (g_state.upgrade_phase != kUpgradePhaseNone || g_state.report_pending != 0 ||
+        g_state.upgrade_available != 0 ||
+        g_state.boot_action != kBootActionNormal) {
+      response->result = kUpgradeCtlResultFail;
+      response->reason = kUpgradeCtlReasonStateConflict;
+      FillUpgradeCtlResponseFromStateLocked(response);
+      return true;
+    }
+  }
+
+  uint32_t pkg_size = 0;
+  if (!PromotePackagePartToPkgBin(&pkg_size)) {
+    response->result = kUpgradeCtlResultFail;
+    response->reason = kUpgradeCtlReasonCommitFailed;
+    return true;
+  }
+  if (request.value0 != 0 && request.value0 != pkg_size) {
+    (void)::unlink(kPkgBinPath);
+    response->result = kUpgradeCtlResultFail;
+    response->reason = kUpgradeCtlReasonCommitFailed;
+    return true;
+  }
+
+  {
+    std::lock_guard<std::mutex> lock(g_state_mu);
+    g_state.target_part = OtherPart(g_state.mender_boot_part);
+    g_state.upgrade_phase = kUpgradePhasePkgReady;
+    g_state.pkg_size = pkg_size;
+    g_state.report_pending = 0;
+    g_state.report_result = kUpgradeReportResultSuccess;
+    g_state.report_reason = kUpgradeReportReasonNone;
+    g_state.last_fail_reason = 0;
+    if (!PersistStateLocked()) {
+      response->result = kUpgradeCtlResultFail;
+      response->reason = kUpgradeCtlReasonCommitFailed;
+      return true;
+    }
+    FillUpgradeCtlResponseFromStateLocked(response);
+  }
+
+  g_install_requested.store(true);
+  LOGI("commit package accepted pid=%u size=%u target=%s(%u)",
+       static_cast<unsigned>(request.pid), static_cast<unsigned>(pkg_size),
+       PartName(response->target_part),
+       static_cast<unsigned>(response->target_part));
+  return true;
+}
+
+bool HandleQueryReportRequest(UpgradeCtlResponseV1* response) {
+  std::lock_guard<std::mutex> lock(g_state_mu);
+  FillUpgradeCtlResponseFromStateLocked(response);
+  return true;
+}
+
+bool HandleClearReportRequest(UpgradeCtlResponseV1* response) {
+  std::lock_guard<std::mutex> lock(g_state_mu);
+  if (g_state.report_pending != 0) {
+    g_state.report_pending = 0;
+    g_state.report_result = kUpgradeReportResultSuccess;
+    g_state.report_reason = kUpgradeReportReasonNone;
+    g_state.target_part = kPartNone;
+    g_state.pkg_size = 0;
+    if (g_state.upgrade_phase == kUpgradePhaseResultPending) {
+      g_state.upgrade_phase = kUpgradePhaseNone;
+    }
+    if (!PersistStateLocked()) {
+      response->result = kUpgradeCtlResultFail;
+      response->reason = kUpgradeCtlReasonCommitFailed;
+      return true;
+    }
+  }
+  FillUpgradeCtlResponseFromStateLocked(response);
+  return true;
+}
+
+bool ProcessUpgradeCtlRequest(const UpgradeCtlRequestV1& request,
+                              UpgradeCtlResponseV1* response) {
+  InitUpgradeCtlResponse(response, request.command);
+  if (!IsValidUpgradeCtlRequestHeader(request)) {
+    response->result = kUpgradeCtlResultFail;
+    response->reason = kUpgradeCtlReasonParamInvalid;
+    return true;
+  }
+
+  switch (request.command) {
+    case kUpgradeCtlCommandCommitPackage:
+      return HandleCommitPackageRequest(request, response);
+    case kUpgradeCtlCommandQueryReport:
+      return HandleQueryReportRequest(response);
+    case kUpgradeCtlCommandClearReport:
+      return HandleClearReportRequest(response);
+    default:
+      response->result = kUpgradeCtlResultFail;
+      response->reason = kUpgradeCtlReasonParamInvalid;
+      return true;
+  }
+}
+
+bool HandleUpgradeCtlAccept(int server_fd) {
+  sockaddr_un addr {};
+  socklen_t addr_len = sizeof(addr);
+  const int client_fd =
+      ::accept(server_fd, reinterpret_cast<sockaddr*>(&addr), &addr_len);
+  if (client_fd < 0) {
+    if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) return true;
+    LOGE("accept upgraded ctl client failed: %s", std::strerror(errno));
+    return false;
+  }
+
+  UpgradeCtlRequestV1 request {};
+  UpgradeCtlResponseV1 response {};
+  bool ok = ReceiveUpgradeCtlRequest(client_fd, &request);
+  if (ok) ok = ProcessUpgradeCtlRequest(request, &response);
+  if (ok) (void)SendUpgradeCtlResponse(client_fd, response);
+  (void)::close(client_fd);
+  return ok;
+}
+
+bool ProcessPendingInstall() {
+  if (!g_install_requested.exchange(false)) return true;
+
+  bool install_ready = false;
+  bool install_ok = false;
+  {
+    std::lock_guard<std::mutex> lock(g_state_mu);
+    if (g_state.upgrade_phase == kUpgradePhasePkgReady ||
+        g_state.upgrade_phase == kUpgradePhaseInstalling) {
+      install_ready = true;
+      install_ok = InstallPendingPackageLocked();
+    }
+  }
+  if (!install_ready) return true;
+  if (!install_ok) return false;
+
+  bool should_restart = false;
+  {
+    std::lock_guard<std::mutex> lock(g_state_mu);
+    should_restart =
+        (g_state.upgrade_phase == kUpgradePhaseTesting &&
+         g_state.upgrade_available == 1);
+  }
+  if (should_restart && !RequestPlannedChildRestart()) {
+    LOGW("install done but planned restart failed");
+  }
+  return true;
+}
 
 bool AcceptWatchdogClientLocked() {
   sockaddr_un addr {};
@@ -970,12 +1515,47 @@ void WatchdogThreadMain() {
     if (should_reset_recovery) {
       LOGI("software watchdog healthy confirmed, clear level1 failure window");
       ClearLevel1History();
+      if (!FinalizeUpgradeSuccess()) {
+        LOGE("finalize upgrade success failed after healthy confirm");
+      }
     }
   }
 
   std::lock_guard<std::mutex> lock(g_watchdog.mu);
   StopWatchdogServerLocked();
   CloseHardwareWatchdogLocked();
+}
+
+void ControlThreadMain() {
+  int server_fd = -1;
+  if (!OpenSeqpacketServer(kUpgradeControlSockPath, &server_fd)) {
+    g_control_thread_failed.store(true);
+    return;
+  }
+
+  LOGI("upgrade ctl socket server ready path=%s", kUpgradeControlSockPath);
+  g_control_thread_ready.store(true);
+
+  while (g_stop_requested == 0) {
+    pollfd poll_fd {};
+    poll_fd.fd = server_fd;
+    poll_fd.events = POLLIN;
+    poll_fd.revents = 0;
+
+    const int rc = ::poll(&poll_fd, 1, static_cast<int>(kPollMs));
+    if (rc < 0 && errno != EINTR) {
+      LOGE("poll upgraded ctl socket failed: %s", std::strerror(errno));
+    }
+    if (rc > 0 && (poll_fd.revents & POLLIN) != 0) {
+      (void)HandleUpgradeCtlAccept(server_fd);
+    }
+    if (!ProcessPendingInstall()) {
+      LOGE("process pending install failed");
+    }
+  }
+
+  (void)::close(server_fd);
+  (void)::unlink(kUpgradeControlSockPath);
 }
 
 bool SleepMsInterruptible(uint32_t ms) {
@@ -1129,17 +1709,24 @@ void RunSupervisorLoop() {
   LOGI("supervisor loop start");
   g_watchdog_thread_ready.store(false);
   g_watchdog_thread_failed.store(false);
+  g_control_thread_ready.store(false);
+  g_control_thread_failed.store(false);
+  g_install_requested.store(false);
   std::thread watchdog_thread(WatchdogThreadMain);
+  std::thread control_thread(ControlThreadMain);
 
   for (int i = 0; i < 20; ++i) {
-    if (g_watchdog_thread_ready.load()) break;
-    if (g_watchdog_thread_failed.load()) break;
+    if (g_watchdog_thread_ready.load() && g_control_thread_ready.load()) break;
+    if (g_watchdog_thread_failed.load() || g_control_thread_failed.load()) break;
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
-  if (!g_watchdog_thread_ready.load()) {
+  if (!g_watchdog_thread_ready.load() || !g_control_thread_ready.load()) {
     g_stop_requested = 1;
     if (watchdog_thread.joinable()) watchdog_thread.join();
-    LOGE("watchdog thread init failed");
+    if (control_thread.joinable()) control_thread.join();
+    LOGE("background thread init failed watchdog_ready=%u control_ready=%u",
+         g_watchdog_thread_ready.load() ? 1u : 0u,
+         g_control_thread_ready.load() ? 1u : 0u);
     return;
   }
 
@@ -1182,12 +1769,18 @@ void RunSupervisorLoop() {
     if (g_stop_requested != 0) break;
 
     const int exit_reason = EncodeExitReason(status);
-    if (!watchdog_requested) {
+    if (!watchdog_requested && !child_health.planned_restart) {
       if (exit_reason != 0) {
         std::lock_guard<std::mutex> lock(g_state_mu);
         g_state.last_fail_reason = static_cast<uint32_t>(exit_reason);
         (void)PersistStateLocked();
       }
+    }
+
+    if (child_health.planned_restart) {
+      LOGI("planned child restart completed, respawn upgraded target immediately");
+      backoff_ms = kRestartBackoffInitMs;
+      continue;
     }
 
     uint32_t level1_reason = watchdog_reason;
@@ -1220,6 +1813,7 @@ void RunSupervisorLoop() {
 
   g_stop_requested = 1;
   if (watchdog_thread.joinable()) watchdog_thread.join();
+  if (control_thread.joinable()) control_thread.join();
 }
 
 }  // namespace
